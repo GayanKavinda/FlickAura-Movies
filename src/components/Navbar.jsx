@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, Heart, Menu, X, Film, Tv, Users, Star, TrendingUp, Calendar, Play } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -12,6 +14,15 @@ const Navbar = () => {
 
   const toggleDropdown = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim() !== '') {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      if (isMenuOpen) setIsMenuOpen(false); // Optional: close mobile menu after search
+    }
   };
 
   return (
@@ -44,26 +55,43 @@ const Navbar = () => {
               >
                 <Film className="h-4 w-4" />
                 <span>Movies</span>
-                <svg className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'movies' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'movies' ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {activeDropdown === 'movies' && (
                 <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden">
                   <div className="p-2">
-                    <Link to="/movies/popular" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/movies/popular"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <TrendingUp className="h-4 w-4 text-pink-400" />
                       <span>Popular Movies</span>
                     </Link>
-                    <Link to="/movies/now-playing" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/movies/now-playing"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <Play className="h-4 w-4 text-pink-400" />
                       <span>Now Playing</span>
                     </Link>
-                    <Link to="/movies/upcoming" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/movies/upcoming"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <Calendar className="h-4 w-4 text-pink-400" />
                       <span>Upcoming</span>
                     </Link>
-                    <Link to="/movies/top-rated" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/movies/top-rated"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <Star className="h-4 w-4 text-pink-400" />
                       <span>Top Rated</span>
                     </Link>
@@ -80,22 +108,36 @@ const Navbar = () => {
               >
                 <Tv className="h-4 w-4" />
                 <span>TV Shows</span>
-                <svg className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'tv' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'tv' ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {activeDropdown === 'tv' && (
                 <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden">
                   <div className="p-2">
-                    <Link to="/tv/popular" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/tv/popular"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <TrendingUp className="h-4 w-4 text-pink-400" />
                       <span>Popular Shows</span>
                     </Link>
-                    <Link to="/tv/now-playing" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/tv/now-playing"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <Play className="h-4 w-4 text-pink-400" />
                       <span>On Air</span>
                     </Link>
-                    <Link to="/tv/top-rated" className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                    <Link
+                      to="/tv/top-rated"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    >
                       <Star className="h-4 w-4 text-pink-400" />
                       <span>Top Rated</span>
                     </Link>
@@ -104,33 +146,62 @@ const Navbar = () => {
               )}
             </div>
 
-            <Link to="/people" className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium">
+            <Link
+              to="/people"
+              className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium"
+            >
               <Users className="h-4 w-4" />
               <span>People</span>
             </Link>
+
+            {/* Search Input Form */}
+            <form onSubmit={handleSearchSubmit} className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="Search movies..."
+                className="rounded-md px-2 py-1 text-black focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="p-2 bg-pink-500 hover:bg-pink-600 rounded-md transition-colors"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5 text-white" />
+              </button>
+            </form>
           </div>
 
-          {/* Right Side Icons */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
-            <Link to="/search" className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200">
+          {/* Right Side Icons for Mobile */}
+          <div className="flex items-center space-x-4 md:hidden">
+            {/* Keep Search icon for mobile (optional: add input here too) */}
+            <Link
+              to="/search"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              aria-label="Search page"
+            >
               <Search className="h-5 w-5" />
             </Link>
 
-            {/* Watchlist */}
-            <Link to="/watchlist" className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200">
+            <Link
+              to="/watchlist"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+            >
               <Heart className="h-5 w-5" />
             </Link>
 
-            {/* User Profile */}
-            <Link to="/login" className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200">
+            <Link
+              to="/login"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+            >
               <User className="h-5 w-5" />
             </Link>
 
-            {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
-              className="md:hidden p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -142,10 +213,13 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-purple-500/30">
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link to="/" className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+            <Link
+              to="/"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+            >
               Home
             </Link>
-            
+
             {/* Mobile Movies Section */}
             <div className="space-y-1">
               <button
@@ -156,22 +230,41 @@ const Navbar = () => {
                   <Film className="h-4 w-4" />
                   <span>Movies</span>
                 </span>
-                <svg className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'mobile-movies' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    activeDropdown === 'mobile-movies' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {activeDropdown === 'mobile-movies' && (
                 <div className="ml-4 space-y-1">
-                  <Link to="/movies/popular" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/movies/popular"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Popular Movies
                   </Link>
-                  <Link to="/movies/now-playing" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/movies/now-playing"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Now Playing
                   </Link>
-                  <Link to="/movies/upcoming" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/movies/upcoming"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Upcoming
                   </Link>
-                  <Link to="/movies/top-rated" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/movies/top-rated"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Top Rated
                   </Link>
                 </div>
@@ -188,40 +281,68 @@ const Navbar = () => {
                   <Tv className="h-4 w-4" />
                   <span>TV Shows</span>
                 </span>
-                <svg className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'mobile-tv' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    activeDropdown === 'mobile-tv' ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {activeDropdown === 'mobile-tv' && (
                 <div className="ml-4 space-y-1">
-                  <Link to="/tv/popular" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/tv/popular"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Popular Shows
                   </Link>
-                  <Link to="/tv/now-playing" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/tv/now-playing"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     On Air
                   </Link>
-                  <Link to="/tv/top-rated" className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+                  <Link
+                    to="/tv/top-rated"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                  >
                     Top Rated
                   </Link>
                 </div>
               )}
             </div>
 
-            <Link to="/people" className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+            <Link
+              to="/people"
+              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+            >
               <Users className="h-4 w-4" />
               <span>People</span>
             </Link>
-            
-            <Link to="/watchlist" className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+
+            <Link
+              to="/watchlist"
+              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+            >
               <Heart className="h-4 w-4" />
               <span>My Watchlist</span>
             </Link>
-            
-            <Link to="/contact" className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+
+            <Link
+              to="/contact"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+            >
               Contact Us
             </Link>
-            
-            <Link to="/about" className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200">
+
+            <Link
+              to="/about"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+            >
               About
             </Link>
           </div>
