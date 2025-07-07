@@ -18,9 +18,6 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 > _Wait for Arrival your Unimaginable Movie Page_
 
 ![App Screenshot](./src/assets/screenshot-preview.png)
-<div style="border-radius: 15px; overflow: hidden;">
-  <img src="./src/assets/screenshot-preview.png" alt="App Screenshot" style="width: 100%; border-radius: 15px;" />
-</div>
 
 ---
 
