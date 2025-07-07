@@ -14,7 +14,8 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 
 ## 📸 Preview
 
-> _Add your screenshots or demo video/gif here for better visual understanding_
+<!-- > _Add your screenshots or demo video/gif here for better visual understanding_ -->
+> _Wait for Arrival your Unimaginable Movie Page_
 
 ![App Screenshot](./src/assets/screenshot-preview.png)
 
