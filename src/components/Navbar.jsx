@@ -31,7 +31,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 group">
+            <Link to="/" className="flex items-center space-x-2 group cursor-pointer">
               <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-xl group-hover:scale-110 transition-transform duration-300">
                 <Film className="h-6 w-6 text-white" />
               </div>
@@ -43,7 +43,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-white hover:text-pink-400 transition-colors duration-200 font-medium">
+            <Link to="/" className="text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer">
               Home
             </Link>
 
@@ -51,7 +51,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown('movies')}
-                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
               >
                 <Film className="h-4 w-4" />
                 <span>Movies</span>
@@ -69,28 +69,28 @@ const Navbar = () => {
                   <div className="p-2">
                     <Link
                       to="/movies/popular"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <TrendingUp className="h-4 w-4 text-pink-400" />
                       <span>Popular Movies</span>
                     </Link>
                     <Link
                       to="/movies/now-playing"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <Play className="h-4 w-4 text-pink-400" />
                       <span>Now Playing</span>
                     </Link>
                     <Link
                       to="/movies/upcoming"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <Calendar className="h-4 w-4 text-pink-400" />
                       <span>Upcoming</span>
                     </Link>
                     <Link
                       to="/movies/top-rated"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <Star className="h-4 w-4 text-pink-400" />
                       <span>Top Rated</span>
@@ -104,7 +104,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown('tv')}
-                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
               >
                 <Tv className="h-4 w-4" />
                 <span>TV Shows</span>
@@ -122,21 +122,21 @@ const Navbar = () => {
                   <div className="p-2">
                     <Link
                       to="/tv/popular"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <TrendingUp className="h-4 w-4 text-pink-400" />
                       <span>Popular Shows</span>
                     </Link>
                     <Link
                       to="/tv/now-playing"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <Play className="h-4 w-4 text-pink-400" />
                       <span>On Air</span>
                     </Link>
                     <Link
                       to="/tv/top-rated"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                     >
                       <Star className="h-4 w-4 text-pink-400" />
                       <span>Top Rated</span>
@@ -148,7 +148,7 @@ const Navbar = () => {
 
             <Link
               to="/people"
-              className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium"
+              className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
             >
               <Users className="h-4 w-4" />
               <span>People</span>
@@ -159,13 +159,13 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search movies..."
-                className="rounded-md px-2 py-1 text-black focus:outline-none"
+                className="rounded-md px-2 py-1 text-white focus:outline-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button
                 type="submit"
-                className="p-2 bg-pink-500 hover:bg-pink-600 rounded-md transition-colors"
+                className="p-2 bg-pink-500 hover:bg-pink-600 rounded-md transition-colors cursor-pointer"
                 aria-label="Search"
               >
                 <Search className="h-5 w-5 text-white" />
@@ -178,7 +178,7 @@ const Navbar = () => {
             {/* Keep Search icon for mobile (optional: add input here too) */}
             <Link
               to="/search"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
               aria-label="Search page"
             >
               <Search className="h-5 w-5" />
@@ -186,21 +186,21 @@ const Navbar = () => {
 
             <Link
               to="/watchlist"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
             >
               <Heart className="h-5 w-5" />
             </Link>
 
             <Link
               to="/login"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
             >
               <User className="h-5 w-5" />
             </Link>
 
             <button
               onClick={toggleMenu}
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200"
+              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -215,7 +215,7 @@ const Navbar = () => {
           <div className="px-4 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               Home
             </Link>
@@ -224,7 +224,7 @@ const Navbar = () => {
             <div className="space-y-1">
               <button
                 onClick={() => toggleDropdown('mobile-movies')}
-                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
               >
                 <span className="flex items-center space-x-2">
                   <Film className="h-4 w-4" />
@@ -245,25 +245,25 @@ const Navbar = () => {
                 <div className="ml-4 space-y-1">
                   <Link
                     to="/movies/popular"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Popular Movies
                   </Link>
                   <Link
                     to="/movies/now-playing"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Now Playing
                   </Link>
                   <Link
                     to="/movies/upcoming"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Upcoming
                   </Link>
                   <Link
                     to="/movies/top-rated"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Top Rated
                   </Link>
@@ -275,7 +275,7 @@ const Navbar = () => {
             <div className="space-y-1">
               <button
                 onClick={() => toggleDropdown('mobile-tv')}
-                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
               >
                 <span className="flex items-center space-x-2">
                   <Tv className="h-4 w-4" />
@@ -296,19 +296,19 @@ const Navbar = () => {
                 <div className="ml-4 space-y-1">
                   <Link
                     to="/tv/popular"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Popular Shows
                   </Link>
                   <Link
                     to="/tv/now-playing"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     On Air
                   </Link>
                   <Link
                     to="/tv/top-rated"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
                   >
                     Top Rated
                   </Link>
@@ -318,7 +318,7 @@ const Navbar = () => {
 
             <Link
               to="/people"
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               <Users className="h-4 w-4" />
               <span>People</span>
@@ -326,7 +326,7 @@ const Navbar = () => {
 
             <Link
               to="/watchlist"
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               <Heart className="h-4 w-4" />
               <span>My Watchlist</span>
@@ -334,14 +334,14 @@ const Navbar = () => {
 
             <Link
               to="/contact"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               Contact Us
             </Link>
 
             <Link
               to="/about"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200"
+              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
             >
               About
             </Link>
