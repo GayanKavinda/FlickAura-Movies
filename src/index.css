@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+@import "tailwindcss";
+
+/* General body styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', sans-serif; /* Change to Railway font */
+}
+
+/* Flex utility */
+.flex {
+  display: flex;
+}
+
+/* Padding utility */
+.p-4 {
+  padding: 1rem; /* Adjust as needed */
+}
+
+/* Background color for dark theme */
+.bg-gray-900 {
+  background-color: #1a1a1a; /* Dark background */
+}
+
+/* Text color utility */
+.text-white {
+  color: white; /* White text */
+}
+
+/* Minimum height for full screen */
+.min-h-screen {
+  min-height: 100vh; /* Full height */
+}
+
+/* Button styles */
+.btn {
+  @apply bg-blue-500 text-white px-4 py-2 rounded; /* Tailwind button styles */
+}
+
+/* Welcome background */
+.welcome-bg {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+}
+
+/* Welcome page font */
+.welcome-font {
+  font-family: 'Karla', sans-serif; /* Apply Railway font */
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-slide {
+  animation: slide 40s linear infinite;
+}
+/* Additional styles can be added here */
