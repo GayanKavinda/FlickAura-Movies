@@ -27,19 +27,19 @@ function App() {
     <>
       {/* Only show Navbar if not on the Welcome page */}
       {location.pathname !== '/' && <Navbar />}
-      <Hero />
+      {/* Only show Hero on /movies */}
+      {location.pathname === '/movies' && <Hero />}
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/movies" element={<PopularMovies />} />
         <Route path="/genres" element={<Genre />} />
         <Route path="/genres/:genreId" element={<FilteredByGenre />} /> {/* Added filtered genre route */}
-        {/* Other routes can be added here */}
-        <Route path="/movies/:id" component={MovieDetail} /> {/* New route for movie details */}
+        <Route path="/movies/:id" element={<MovieDetail />} /> {/* New route for movie details */}
         <Route path="/search" element={<Search />} />
       </Routes>
 
-      {/* Render additional sections only if not on the Welcome page */}
-      {location.pathname !== '/' && (
+      {/* Only show Footer if not on the Welcome page */}
+      {location.pathname === '/movies' && (
         <div className="p-4 bg-gray-900 min-h-screen">
           <NowPlaying />
           <Upcoming />
@@ -48,7 +48,11 @@ function App() {
           <TVShows />
           <People />
           <Footer />
-          {/* <Watchlist /> */}
+        </div>
+      )}
+      {location.pathname !== '/' && location.pathname !== '/movies' && (
+        <div className="p-4 bg-gray-900">
+          <Footer />
         </div>
       )}
     </>

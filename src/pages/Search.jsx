@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List, Star, Calendar, Eye, Heart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
 
 const ModernSearch = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const queryFromURL = searchParams.get('q') || '';
   
   const [searchQuery, setSearchQuery] = useState(queryFromURL);
@@ -185,7 +185,7 @@ const ModernSearch = () => {
     const formData = new FormData(e.target);
     const query = formData.get('search');
     if (query && query.trim()) {
-      setSearchQuery(query.trim());
+      setSearchParams({ q: query.trim() }); // <-- This updates the URL
       setCurrentPage(1);
     }
   };
@@ -196,7 +196,7 @@ const ModernSearch = () => {
         <div key={movie.id} className="group relative bg-gradient-to-br from-black/70 to-gray-900/70 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
           <div className="relative overflow-hidden">
             <img
-              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
+              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/500x750?text=No+Image"}
               alt={movie.title || 'Movie poster'}
               className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
             />
@@ -244,7 +244,7 @@ const ModernSearch = () => {
           <div className="flex">
             <div className="w-32 h-48 flex-shrink-0 relative overflow-hidden">
               <img
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/500x750?text=No+Image"}
                 alt={movie.title || 'Movie poster'}
                 className="w-full h-full object-cover"
               />
@@ -296,7 +296,7 @@ const ModernSearch = () => {
           <div className="flex gap-4">
             <div className="w-20 h-28 flex-shrink-0 relative overflow-hidden rounded-lg">
               <img
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/500x750?text=No+Image"}
                 alt={movie.title || 'Movie poster'}
                 className="w-full h-full object-cover"
               />
@@ -337,7 +337,7 @@ const ModernSearch = () => {
   );
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden pb-24">
       {/* Dynamic Background with Fade Effect */}
       <div className="absolute inset-0 z-0">
         {backgroundImages.map((image, index) => (
@@ -417,7 +417,7 @@ const ModernSearch = () => {
                 </div>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm cursor-pointer"
                 >
                   <Filter className="w-5 h-5" />
                   <span>Filters</span>
@@ -523,28 +523,28 @@ const ModernSearch = () => {
               
               {/* Pagination */}
               {totalResults > 20 && (
-                <div className="flex items-center justify-center mt-12 gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center mt-8 gap-2 sm:gap-4">
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
                   >
                     <ChevronDown className="w-4 h-4 rotate-90" />
-                    Previous
+                    Prev
                   </button>
-                  
-                  <div className="flex items-center gap-2">
+
+                  <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full">
                     {[...Array(Math.min(5, Math.ceil(totalResults / 20)))].map((_, index) => {
                       const pageNumber = currentPage <= 3 ? index + 1 : currentPage - 2 + index;
                       const totalPages = Math.ceil(totalResults / 20);
-                      
+
                       if (pageNumber > totalPages) return null;
-                      
+
                       return (
                         <button
                           key={pageNumber}
                           onClick={() => setCurrentPage(pageNumber)}
-                          className={`w-10 h-10 rounded-lg font-medium transition-colors backdrop-blur-md border cursor-pointer ${
+                          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer ${
                             currentPage === pageNumber
                               ? 'bg-purple-600 text-white border-purple-500'
                               : 'bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50'
@@ -555,11 +555,11 @@ const ModernSearch = () => {
                       );
                     })}
                   </div>
-                  
+
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(Math.ceil(totalResults / 20), prev + 1))}
                     disabled={currentPage >= Math.ceil(totalResults / 20)}
-                    className="flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
                   >
                     Next
                     <ChevronDown className="w-4 h-4 -rotate-90" />
@@ -584,7 +584,7 @@ const ModernSearch = () => {
           <button
             key={index}
             onClick={() => setCurrentImageIndex(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
               index === currentImageIndex
                 ? 'bg-purple-500 shadow-lg shadow-purple-500/50'
                 : 'bg-white/30 hover:bg-white/50'

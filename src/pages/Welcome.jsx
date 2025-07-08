@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const WelcomeSunset  = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [setParticles] = useState([]);
+  const [particles, setParticles] = useState([]); // <-- Correct way
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
