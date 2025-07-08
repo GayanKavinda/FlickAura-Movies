@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, Grid, List, Star, Calendar, Eye, Heart, ChevronDown, X, SlidersHorizontal } from 'lucide-react';
 
-const ModernSearch = ({ searchQuery = 'Batman' }) => {
-  const query = searchQuery;
-
+const ModernSearch = () => {
+  const [searchParams] = useSearchParams();
+  const queryFromURL = searchParams.get('q') || '';
+  
+  const [searchQuery, setSearchQuery] = useState(queryFromURL);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
@@ -66,9 +69,16 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Update search query when URL changes
+  useEffect(() => {
+    setSearchQuery(queryFromURL);
+    setCurrentPage(1); // Reset to first page when search changes
+  }, [queryFromURL]);
+
   const fetchSearchResults = async () => {
-    if (!query.trim()) {
+    if (!searchQuery.trim()) {
       setResults([]);
+      setTotalResults(0);
       return;
     }
 
@@ -79,44 +89,56 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
       const baseUrl = 'https://api.themoviedb.org/3/search/movie';
       const params = new URLSearchParams({
         api_key: apiKey,
-        query: query,
+        query: searchQuery,
         language: 'en-US',
-        page: currentPage,
-        include_adult: filters.includeAdult
+        page: currentPage.toString(),
+        include_adult: filters.includeAdult ? 'true' : 'false'
       });
 
       if (filters.year) params.append('year', filters.year);
 
       const response = await fetch(`${baseUrl}?${params}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
 
       if (data.results) {
         let filteredResults = data.results;
 
+        // Apply genre filter
         if (filters.genre) {
           filteredResults = filteredResults.filter(movie => 
-            movie.genre_ids.includes(parseInt(filters.genre))
+            movie.genre_ids && movie.genre_ids.includes(parseInt(filters.genre))
           );
         }
 
+        // Apply rating filter
         if (filters.rating) {
           filteredResults = filteredResults.filter(movie => 
             movie.vote_average >= parseFloat(filters.rating)
           );
         }
 
+        // Apply sorting
         if (sortBy === 'rating') {
-          filteredResults.sort((a, b) => b.vote_average - a.vote_average);
+          filteredResults.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
         } else if (sortBy === 'release_date') {
-          filteredResults.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+          filteredResults.sort((a, b) => {
+            const dateA = new Date(a.release_date || '1900-01-01');
+            const dateB = new Date(b.release_date || '1900-01-01');
+            return dateB - dateA;
+          });
         } else if (sortBy === 'title') {
-          filteredResults.sort((a, b) => a.title.localeCompare(b.title));
+          filteredResults.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         } else {
-          filteredResults.sort((a, b) => b.popularity - a.popularity);
+          filteredResults.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         }
 
         setResults(filteredResults);
-        setTotalResults(data.total_results);
+        setTotalResults(data.total_results || 0);
       } else {
         setResults([]);
         setTotalResults(0);
@@ -125,6 +147,7 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
       console.error('Error fetching search results:', error);
       setResults([]);
       setTotalResults(0);
+      // You might want to show an error message to the user here
     } finally {
       setLoading(false);
     }
@@ -132,13 +155,14 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
 
   useEffect(() => {
     fetchSearchResults();
-  }, [query, currentPage, filters, sortBy]);
+  }, [searchQuery, currentPage, filters, sortBy]);
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
       ...prev,
       [filterType]: value
     }));
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   const clearFilters = () => {
@@ -146,13 +170,24 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
       year: '',
       genre: '',
       rating: '',
-      runtime: ''
+      includeAdult: false
     });
+    setCurrentPage(1);
   };
 
   const getGenreName = (genreId) => {
     const genre = genres.find(g => g.id === genreId);
     return genre ? genre.name : '';
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const query = formData.get('search');
+    if (query && query.trim()) {
+      setSearchQuery(query.trim());
+      setCurrentPage(1);
+    }
   };
 
   const GridView = () => (
@@ -162,13 +197,13 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
           <div className="relative overflow-hidden">
             <img
               src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
-              alt={movie.title}
+              alt={movie.title || 'Movie poster'}
               className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
               <Star className="w-4 h-4 text-yellow-400 fill-current" />
-              <span className="text-white text-sm font-medium">{movie.vote_average.toFixed(1)}</span>
+              <span className="text-white text-sm font-medium">{(movie.vote_average || 0).toFixed(1)}</span>
             </div>
             <div className="absolute bottom-3 left-3 right-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
               <div className="flex items-center gap-2 text-white/90 text-sm">
@@ -178,10 +213,10 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
             </div>
           </div>
           <div className="p-4">
-            <h3 className="text-white font-semibold text-lg mb-2 line-clamp-1">{movie.title}</h3>
-            <p className="text-gray-300 text-sm line-clamp-2 mb-3">{movie.overview}</p>
+            <h3 className="text-white font-semibold text-lg mb-2 line-clamp-1">{movie.title || 'Unknown Title'}</h3>
+            <p className="text-gray-300 text-sm line-clamp-2 mb-3">{movie.overview || 'No description available'}</p>
             <div className="flex flex-wrap gap-1 mb-3">
-              {movie.genre_ids.slice(0, 2).map(genreId => (
+              {(movie.genre_ids || []).slice(0, 2).map(genreId => (
                 <span key={genreId} className="px-2 py-1 bg-purple-500/30 text-purple-300 rounded-full text-xs">
                   {getGenreName(genreId)}
                 </span>
@@ -210,19 +245,19 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
             <div className="w-32 h-48 flex-shrink-0 relative overflow-hidden">
               <img
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
-                alt={movie.title}
+                alt={movie.title || 'Movie poster'}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 p-6">
               <div className="flex items-start justify-between mb-3">
-                <h3 className="text-white font-bold text-xl mb-2">{movie.title}</h3>
+                <h3 className="text-white font-bold text-xl mb-2">{movie.title || 'Unknown Title'}</h3>
                 <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="text-white font-medium">{movie.vote_average.toFixed(1)}</span>
+                  <span className="text-white font-medium">{(movie.vote_average || 0).toFixed(1)}</span>
                 </div>
               </div>
-              <p className="text-gray-300 mb-4 line-clamp-3">{movie.overview}</p>
+              <p className="text-gray-300 mb-4 line-clamp-3">{movie.overview || 'No description available'}</p>
               <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
@@ -231,7 +266,7 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap gap-2">
-                  {movie.genre_ids.slice(0, 3).map(genreId => (
+                  {(movie.genre_ids || []).slice(0, 3).map(genreId => (
                     <span key={genreId} className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-sm">
                       {getGenreName(genreId)}
                     </span>
@@ -262,24 +297,24 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
             <div className="w-20 h-28 flex-shrink-0 relative overflow-hidden rounded-lg">
               <img
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image'}
-                alt={movie.title}
+                alt={movie.title || 'Movie poster'}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-white font-semibold text-lg mb-1 truncate">{movie.title}</h3>
+              <h3 className="text-white font-semibold text-lg mb-1 truncate">{movie.title || 'Unknown Title'}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
                 <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</span>
                 <span>•</span>
                 <div className="flex items-center gap-1">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  <span>{movie.vote_average.toFixed(1)}</span>
+                  <span>{(movie.vote_average || 0).toFixed(1)}</span>
                 </div>
               </div>
-              <p className="text-gray-300 text-sm line-clamp-2 mb-3">{movie.overview}</p>
+              <p className="text-gray-300 text-sm line-clamp-2 mb-3">{movie.overview || 'No description available'}</p>
               <div className="flex items-center justify-between">
                 <div className="flex gap-1">
-                  {movie.genre_ids.slice(0, 2).map(genreId => (
+                  {(movie.genre_ids || []).slice(0, 2).map(genreId => (
                     <span key={genreId} className="px-2 py-1 bg-purple-500/30 text-purple-300 rounded text-xs">
                       {getGenreName(genreId)}
                     </span>
@@ -328,13 +363,35 @@ const ModernSearch = ({ searchQuery = 'Batman' }) => {
         {/* Header */}
         <div className="bg-black/30 backdrop-blur-md border-b border-gray-700/50 sticky top-0 z-20">
           <div className="max-w-7xl mx-auto px-4 py-6">
+            {/* Search Bar */}
+            <div className="mb-6">
+              <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto">
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="search"
+                    placeholder="Search for movies..."
+                    defaultValue={searchQuery}
+                    className="w-full pl-12 pr-4 py-3 bg-black/50 backdrop-blur-md border border-gray-600/50 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl transition-colors"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
+
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
                   Search Results
                 </h1>
                 <p className="text-gray-300 drop-shadow-md">
-                  Found {totalResults} movies for "{query}"
+                  {searchQuery ? `Found ${totalResults} movies for "${searchQuery}"` : 'Enter a search term to find movies'}
                 </p>
               </div>
               <div className="flex items-center gap-4">

@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 backdrop-blur-lg border-b border-purple-500/20 sticky top-0 z-50">
+    <nav className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 backdrop-blur-lg border-b border-purple-500/20 sticky top-0 z-50 bg-opacity-80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -65,7 +65,7 @@ const Navbar = () => {
                 </svg>
               </button>
               {activeDropdown === 'movies' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="p-2">
                     <Link
                       to="/movies/popular"
@@ -118,7 +118,7 @@ const Navbar = () => {
                 </svg>
               </button>
               {activeDropdown === 'tv' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden transform transition-transform duration-300 hover:scale-105">
                   <div className="p-2">
                     <Link
                       to="/tv/popular"
