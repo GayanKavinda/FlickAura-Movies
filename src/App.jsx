@@ -28,7 +28,7 @@ function App() {
       {/* Only show Navbar if not on the Welcome page */}
       {/* {location.pathname !== '/' && <Navbar />} */}
       {/* Only show Hero on /movies */}
-      {/* {location.pathname === '/movies' && <Hero />} */}
+      {location.pathname === '/movies' && <Hero />}
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/movies" element={<PopularMovies />} />
