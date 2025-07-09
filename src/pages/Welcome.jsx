@@ -1,209 +1,206 @@
 import React, { useState, useEffect } from 'react';
 
-const FilmStripMovieSite = () => {
+const ModernMovieWelcome = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const [developingCard, setDevelopingCard] = useState(null);
-  const [apertureOpen, setApertureOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [glowIntensity, setGlowIntensity] = useState(0);
 
-  const filmFrames = [
-    { id: 1, title: "ACTION", color: "from-red-600 to-red-800", poster: "🎬" },
-    { id: 2, title: "DRAMA", color: "from-blue-600 to-blue-800", poster: "🎭" },
-    { id: 3, title: "COMEDY", color: "from-yellow-600 to-yellow-800", poster: "😄" },
-    { id: 4, title: "HORROR", color: "from-purple-600 to-purple-800", poster: "👻" },
-    { id: 5, title: "SCI-FI", color: "from-green-600 to-green-800", poster: "🚀" },
-    { id: 6, title: "ROMANCE", color: "from-pink-600 to-pink-800", poster: "💕" }
+  const heroMovies = [
+    {
+      title: "CINEMATIC",
+      subtitle: "EXPERIENCE",
+      color: "from-red-500 to-orange-500",
+      shadow: "shadow-red-500/20"
+    },
+    {
+      title: "IMMERSIVE",
+      subtitle: "STORYTELLING",
+      color: "from-blue-500 to-cyan-500",
+      shadow: "shadow-blue-500/20"
+    },
+    {
+      title: "ENDLESS",
+      subtitle: "DISCOVERY",
+      color: "from-emerald-500 to-teal-500",
+      shadow: "shadow-emerald-500/20"
+    }
   ];
 
   useEffect(() => {
-    setIsLoaded(true);
-    setApertureOpen(true);
+    setTimeout(() => setIsLoaded(true), 200);
     
-    const frameInterval = setInterval(() => {
-      setCurrentFrame((prev) => (prev + 1) % filmFrames.length);
-    }, 3000);
+    const slideInterval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroMovies.length);
+    }, 4000);
 
-    return () => clearInterval(frameInterval);
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setMousePos({ x, y });
+      
+      // Create glow effect based on mouse position
+      const intensity = Math.sin(Date.now() * 0.001) * 0.5 + 0.5;
+      setGlowIntensity(intensity);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      clearInterval(slideInterval);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
-  const handleCardHover = (cardId) => {
-    setDevelopingCard(cardId);
-  };
-
-  const handleCardLeave = () => {
-    setTimeout(() => setDevelopingCard(null), 300);
-  };
+  const currentMovie = heroMovies[currentSlide];
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Film Grain Overlay */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="w-full h-full bg-repeat animate-pulse" 
-             style={{
-               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E")`,
-               backgroundSize: '200px 200px'
-             }}>
-        </div>
+    <div className="relative min-h-screen bg-black overflow-hidden">
+      {/* Animated Background Grid */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px',
+          animation: 'grid-move 20s linear infinite'
+        }}></div>
       </div>
 
-      {/* Film Strip Border */}
-      <div className="absolute top-0 left-0 w-full h-8 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 flex items-center justify-center">
-        <div className="flex space-x-2">
-          {[...Array(20)].map((_, i) => (
-            <div key={i} className="w-4 h-4 bg-black rounded-sm"></div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 flex items-center justify-center">
-        <div className="flex space-x-2">
-          {[...Array(20)].map((_, i) => (
-            <div key={i} className="w-4 h-4 bg-black rounded-sm"></div>
-          ))}
-        </div>
-      </div>
+      {/* Dynamic Mouse Glow */}
+      <div 
+        className="absolute inset-0 pointer-events-none transition-all duration-300"
+        style={{
+          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, 
+            rgba(255, 255, 255, ${glowIntensity * 0.05}) 0%, 
+            transparent 50%)`
+        }}
+      />
 
-      {/* Camera Aperture Effect */}
-      <div className={`fixed inset-0 z-50 pointer-events-none transition-all duration-2000 ${
-        apertureOpen ? 'scale-150 opacity-0' : 'scale-100 opacity-100'
-      }`}>
-        <div className="absolute inset-0 bg-black">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-0 h-0 border-l-[50vw] border-r-[50vw] border-b-[50vh] border-l-transparent border-r-transparent border-b-black"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-0 h-0 border-l-[50vw] border-r-[50vw] border-t-[50vh] border-l-transparent border-r-transparent border-t-black"></div>
-        </div>
+      {/* Floating Geometric Shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute opacity-5 animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${4 + Math.random() * 4}s`
+            }}
+          >
+            <div className="w-32 h-32 border border-white/20 rotate-45 transform hover:rotate-90 transition-transform duration-1000"></div>
+          </div>
+        ))}
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 pt-16 pb-16">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         
-        {/* Header */}
-        <div className={`text-center mb-12 transform transition-all duration-1000 ${
+        {/* Logo/Brand */}
+        <div className={`transform transition-all duration-1000 ${
           isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
         }`}>
-          <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mr-4 animate-pulse">
-              <span className="text-black text-2xl">🎞️</span>
+          <div className="flex items-center mb-8">
+            <div className="w-12 h-12 bg-gradient-to-r from-white to-gray-300 rounded-lg mr-4 flex items-center justify-center">
+              <span className="text-black text-2xl font-black">M</span>
             </div>
-            <h1 className="text-6xl font-bold text-white tracking-wider" style={{ fontFamily: 'serif' }}>
-              REEL<span className="text-yellow-500">CINEMA</span>
+            <h1 className="text-4xl font-light text-white tracking-wider">
+              MOVIEVERSE
             </h1>
           </div>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Experience movies like never before • Frame by frame • Story by story
+        </div>
+
+        {/* Dynamic Hero Text */}
+        <div className={`text-center mb-12 transform transition-all duration-1000 delay-300 ${
+          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+        }`}>
+          <div className="relative overflow-hidden h-32 mb-6">
+            <div 
+              className="absolute inset-0 transition-transform duration-1000 ease-in-out"
+              style={{ transform: `translateY(-${currentSlide * 100}%)` }}
+            >
+              {heroMovies.map((movie, index) => (
+                <div key={index} className="h-32 flex flex-col justify-center">
+                  <h2 className={`text-7xl md:text-8xl font-black mb-2 bg-gradient-to-r ${movie.color} bg-clip-text text-transparent ${movie.shadow} hover:scale-105 transition-transform duration-300`}>
+                    {movie.title}
+                  </h2>
+                  <h3 className="text-2xl md:text-3xl font-light text-gray-300 tracking-widest">
+                    {movie.subtitle}
+                  </h3>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Step into a world where every frame tells a story. Discover, explore, and experience cinema like never before.
           </p>
         </div>
 
-        {/* Film Strip Navigation */}
-        <div className="relative mb-16 overflow-hidden">
-          <div className="flex items-center justify-center">
-            <div className="relative">
-              {/* Film Strip Background */}
-              <div className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg shadow-2xl">
-                <div className="flex space-x-2 overflow-hidden">
-                  {filmFrames.map((frame, index) => (
-                    <div
-                      key={frame.id}
-                      className={`relative w-32 h-48 bg-gradient-to-br ${frame.color} rounded-lg transform transition-all duration-500 cursor-pointer ${
-                        index === currentFrame ? 'scale-110 shadow-2xl' : 'scale-95 opacity-70'
-                      }`}
-                      onClick={() => setCurrentFrame(index)}
-                    >
-                      {/* Film Frame Holes */}
-                      <div className="absolute -left-1 top-4 w-2 h-2 bg-black rounded-full"></div>
-                      <div className="absolute -left-1 bottom-4 w-2 h-2 bg-black rounded-full"></div>
-                      <div className="absolute -right-1 top-4 w-2 h-2 bg-black rounded-full"></div>
-                      <div className="absolute -right-1 bottom-4 w-2 h-2 bg-black rounded-full"></div>
-                      
-                      {/* Frame Content */}
-                      <div className="flex flex-col items-center justify-center h-full text-white">
-                        <div className="text-4xl mb-2">{frame.poster}</div>
-                        <div className="text-sm font-bold tracking-wider">{frame.title}</div>
-                      </div>
-                      
-                      {/* Active Frame Indicator */}
-                      {index === currentFrame && (
-                        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-yellow-500 rounded-full animate-pulse"></div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Film Strip Perforations */}
-              <div className="absolute left-0 top-0 h-full w-2 flex flex-col justify-evenly">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                ))}
-              </div>
-              <div className="absolute right-0 top-0 h-full w-2 flex flex-col justify-evenly">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="w-1 h-1 bg-gray-600 rounded-full"></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Movie Cards - Polaroid Style */}
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((card) => (
-              <div
-                key={card}
-                className={`relative bg-white p-4 rounded-lg shadow-xl transform transition-all duration-700 hover:scale-105 hover:rotate-1 cursor-pointer ${
-                  developingCard === card ? 'animate-pulse' : ''
-                }`}
-                onMouseEnter={() => handleCardHover(card)}
-                onMouseLeave={handleCardLeave}
-                style={{
-                  transform: `rotate(${Math.random() * 6 - 3}deg)`,
-                  animation: developingCard === card ? 'develop 1s ease-in-out' : 'none'
-                }}
-              >
-                {/* Polaroid Photo */}
-                <div className={`w-full h-48 bg-gradient-to-br ${filmFrames[card % filmFrames.length].color} rounded-lg mb-4 flex items-center justify-center text-6xl transform transition-all duration-500 ${
-                  developingCard === card ? 'grayscale-0' : 'grayscale'
-                }`}>
-                  {filmFrames[card % filmFrames.length].poster}
-                </div>
-                
-                {/* Polaroid Caption */}
-                <div className="text-center">
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">Movie Title {card}</h3>
-                  <p className="text-sm text-gray-600">Genre • 2024</p>
-                </div>
-                
-                {/* Developing Effect */}
-                {developingCard === card && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg pointer-events-none animate-pulse"></div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* CTA Button */}
-        <div className="text-center mt-16">
+        <div className={`transform transition-all duration-1000 delay-600 ${
+          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+        }`}>
           <button 
             onClick={() => window.location.href = '/movies'}
-            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-black bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl shadow-yellow-500/25 focus:outline-none focus:ring-4 focus:ring-yellow-500/50"
+            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-white rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/20 focus:outline-none focus:ring-4 focus:ring-white/50 overflow-hidden"
           >
-            <span className="mr-3">🎬</span>
-            ENTER THE CINEMA
-            <span className="ml-3 transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+            <span className="absolute inset-0 bg-gradient-to-r from-white to-gray-200 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></span>
+            <span className="relative flex items-center">
+              <span className="mr-3">▶</span>
+              START EXPLORING
+              <span className="ml-3 transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+            </span>
           </button>
+        </div>
+
+        {/* Feature Pills */}
+        <div className={`mt-16 flex flex-wrap justify-center gap-4 transform transition-all duration-1000 delay-800 ${
+          isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+        }`}>
+          {[
+            { icon: '🎬', text: 'Latest Releases' },
+            { icon: '⭐', text: 'Top Rated' },
+            { icon: '🔥', text: 'Trending Now' },
+            { icon: '🎯', text: 'Curated' }
+          ].map((feature, index) => (
+            <div 
+              key={index}
+              className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-default group"
+            >
+              <span className="mr-2 group-hover:scale-110 transition-transform duration-300">
+                {feature.icon}
+              </span>
+              {feature.text}
+            </div>
+          ))}
+        </div>
+
+        {/* Slide Indicators */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {heroMovies.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentSlide ? 'bg-white w-8' : 'bg-white/30'
+              }`}
+            />
+          ))}
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes develop {
-          0% { filter: sepia(100%) contrast(150%); }
-          50% { filter: sepia(50%) contrast(125%); }
-          100% { filter: sepia(0%) contrast(100%); }
+        @keyframes grid-move {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(50px, 50px); }
         }
       `}</style>
     </div>
   );
 };
 
-export default FilmStripMovieSite;
+export default ModernMovieWelcome;
