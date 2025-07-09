@@ -42,31 +42,31 @@ const Footer = () => {
             <div className="flex space-x-4">
               <button 
                 onClick={() => handleSocialClick('facebook')}
-                className="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Facebook className="h-5 w-5" />
               </button>
               <button 
                 onClick={() => handleSocialClick('twitter')}
-                className="w-10 h-10 bg-gray-700 hover:bg-blue-400 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-10 h-10 bg-gray-700 hover:bg-blue-400 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Twitter className="h-5 w-5" />
               </button>
               <button 
                 onClick={() => handleSocialClick('instagram')}
-                className="w-10 h-10 bg-gray-700 hover:bg-pink-500 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-10 h-10 bg-gray-700 hover:bg-pink-500 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Instagram className="h-5 w-5" />
               </button>
               <button 
                 onClick={() => handleSocialClick('youtube')}
-                className="w-10 h-10 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-10 h-10 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Youtube className="h-5 w-5" />
               </button>
               <button 
                 onClick={() => handleSocialClick('github')}
-                className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors duration-200"
+                className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Github className="h-5 w-5" />
               </button>
@@ -80,7 +80,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/movies')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <TrendingUp className="h-4 w-4" />
                   <span>Popular Movies</span>
@@ -89,7 +89,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/movies/now-playing')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Film className="h-4 w-4" />
                   <span>Now Playing</span>
@@ -98,7 +98,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/movies/upcoming')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Calendar className="h-4 w-4" />
                   <span>Upcoming Movies</span>
@@ -107,7 +107,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/movies/top-rated')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Star className="h-4 w-4" />
                   <span>Top Rated</span>
@@ -116,7 +116,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/genres')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Browse by Genre
                 </button>
@@ -124,7 +124,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/people')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Celebrities
                 </button>
@@ -139,7 +139,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/about')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   About FlickAura
                 </button>
@@ -147,7 +147,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/contact')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Contact Us
                 </button>
@@ -155,7 +155,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/privacy')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Privacy Policy
                 </button>
@@ -163,7 +163,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/terms')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Terms of Service
                 </button>
@@ -171,7 +171,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/api')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   API Documentation
                 </button>
@@ -179,7 +179,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => handleNavClick('/help')}
-                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Help Center
                 </button>
@@ -202,7 +202,7 @@ const Footer = () => {
               />
               <button
                 onClick={handleSubscribe}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-colors duration-200 font-medium"
+                className="cursor-pointer w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-colors duration-200 font-medium"
               >
                 Subscribe
               </button>
@@ -215,11 +215,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2 text-gray-400">
                 <Phone className="h-4 w-4" />
-                <span className="text-sm">+1 (555) 123-4567</span>
+                <span className="text-sm">+94 (70) 213-1350</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-400">
                 <MapPin className="h-4 w-4" />
-                <span className="text-sm">San Francisco, CA</span>
+                <span className="text-sm">Yakkala, SL</span>
               </div>
             </div>
           </div>
@@ -248,19 +248,19 @@ const Footer = () => {
               <div className="flex space-x-4">
                 <button 
                   onClick={() => handleNavClick('/privacy')}
-                  className="text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
+                  className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Privacy
                 </button>
                 <button 
                   onClick={() => handleNavClick('/terms')}
-                  className="text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
+                  className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Terms
                 </button>
                 <button 
                   onClick={() => handleNavClick('/cookies')}
-                  className="text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
+                  className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Cookies
                 </button>
