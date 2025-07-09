@@ -278,7 +278,7 @@ const CreativeMovieSlider = () => {
                 {/* Duration Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   ⏱ <span>{currentMovie.duration}</span>
                 </span>
@@ -286,7 +286,7 @@ const CreativeMovieSlider = () => {
                 {/* Year Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   📅 <span>{currentMovie.year}</span>
                 </span>
@@ -294,7 +294,7 @@ const CreativeMovieSlider = () => {
                 {/* Language Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   Lang: <span>{currentMovie.language?.toUpperCase()}</span>
                 </span>
@@ -302,7 +302,7 @@ const CreativeMovieSlider = () => {
                 {/* Status Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   Status: <span>{currentMovie.status}</span>
                 </span>
@@ -310,7 +310,7 @@ const CreativeMovieSlider = () => {
                 {/* Budget Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   Budget:{" "}
                   <span>${Math.round(currentMovie.budget / 1_000_000)}M</span>
@@ -319,7 +319,7 @@ const CreativeMovieSlider = () => {
                 {/* Revenue Badge */}
                 <span
                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
-    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+    bg-gradient-to-r from-purple-700/50 to-purple-900/50 text-white shadow-md select-none"
                 >
                   Revenue:{" "}
                   <span>${Math.round(currentMovie.revenue / 1_000_000)}M</span>
@@ -362,7 +362,7 @@ const CreativeMovieSlider = () => {
               </div>
 
               {/* Genre */}
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-600 text-white shadow-md select-none">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-600/50 text-white shadow-md select-none">
                 <Star className="w-4 h-4 text-yellow-400" />
                 {currentMovie.genre}
               </span>
