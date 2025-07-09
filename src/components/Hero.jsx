@@ -206,7 +206,7 @@ const CreativeMovieSlider = () => {
   const currentMovie = movies[currentSlide];
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black pt-0 pb-0">
+    <div className="relative w-full h-screen overflow-hidden bg-black pt-0 pb-0 overflow-hidden">
       {/* Background with parallax effect - reduced on mobile */}
       <div className="absolute inset-0">
         {movies.map((movie, index) => (
