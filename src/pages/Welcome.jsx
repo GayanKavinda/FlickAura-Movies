@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import Spline from '@splinetool/react-spline';
 
 const ModernMovieWelcome = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [glowIntensity, setGlowIntensity] = useState(0);
+  const [splineLoaded, setSplineLoaded] = useState(false);
 
   const heroMovies = [
     {
@@ -52,62 +54,54 @@ const ModernMovieWelcome = () => {
     };
   }, []);
 
+  const onSplineLoad = (splineApp) => {
+    setSplineLoaded(true);
+    // Enable mouse interaction with the Spline scene
+    if (splineApp) {
+      splineApp.setZoom(1);
+    }
+  };
+
   const currentMovie = heroMovies[currentSlide];
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
-        }}></div>
-      </div>
-
-      {/* Dynamic Mouse Glow */}
-      <div 
-        className="absolute inset-0 pointer-events-none transition-all duration-300"
-        style={{
-          background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, 
-            rgba(255, 255, 255, ${glowIntensity * 0.05}) 0%, 
-            transparent 50%)`
-        }}
-      />
-
-      {/* Floating Geometric Shapes */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute opacity-5 animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: `${4 + Math.random() * 4}s`
-            }}
-          >
-            <div className="w-32 h-32 border border-white/20 rotate-45 transform hover:rotate-90 transition-transform duration-1000"></div>
+      {/* Spline 3D Background */}
+      <div className="absolute inset-0 z-0" style={{ pointerEvents: 'auto' }}>
+        <Suspense fallback={
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+            <div className="text-white text-xl animate-pulse">Loading 3D Scene...</div>
           </div>
-        ))}
+        }>
+          <Spline
+            scene="https://prod.spline.design/vAd4XZ8qzDo17oDK/scene.splinecode"
+            onLoad={onSplineLoad}
+            className="w-full h-full"
+            style={{
+              background: 'transparent',
+              opacity: splineLoaded ? 0.8 : 0,
+              transition: 'opacity 1s ease-in-out',
+              pointerEvents: 'auto'
+            }}
+          />
+        </Suspense>
       </div>
+
+      {/* Interactive overlay - allows mouse events to pass through to Spline */}
+      <div className="absolute inset-0 z-5 bg-black/40 backdrop-blur-[1px]" style={{ pointerEvents: 'none' }} />
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+      <div className="relative z-30 flex flex-col items-center justify-center min-h-screen px-6" style={{ pointerEvents: 'none' }}>
         
         {/* Logo/Brand */}
         <div className={`transform transition-all duration-1000 ${
           isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'
-        }`}>
+        }`} style={{ pointerEvents: 'auto' }}>
           <div className="flex items-center mb-8">
-            <div className="w-12 h-12 bg-gradient-to-r from-white to-gray-300 rounded-lg mr-4 flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-white to-gray-300 rounded-lg mr-4 flex items-center justify-center shadow-lg shadow-white/20">
               <span className="text-black text-2xl font-black">M</span>
             </div>
-            <h1 className="text-4xl font-light text-white tracking-wider">
+            <h1 className="text-4xl font-light text-white tracking-wider drop-shadow-lg">
               MOVIEVERSE
             </h1>
           </div>
@@ -116,7 +110,7 @@ const ModernMovieWelcome = () => {
         {/* Dynamic Hero Text */}
         <div className={`text-center mb-12 transform transition-all duration-1000 delay-300 ${
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
+        }`} style={{ pointerEvents: 'auto' }}>
           <div className="relative overflow-hidden h-32 mb-6">
             <div 
               className="absolute inset-0 transition-transform duration-1000 ease-in-out"
@@ -124,10 +118,10 @@ const ModernMovieWelcome = () => {
             >
               {heroMovies.map((movie, index) => (
                 <div key={index} className="h-32 flex flex-col justify-center">
-                  <h2 className={`text-7xl md:text-8xl font-black mb-2 bg-gradient-to-r ${movie.color} bg-clip-text text-transparent ${movie.shadow} hover:scale-105 transition-transform duration-300`}>
+                  <h2 className={`text-7xl md:text-8xl font-black mb-2 bg-gradient-to-r ${movie.color} bg-clip-text text-transparent ${movie.shadow} hover:scale-105 transition-transform duration-300 drop-shadow-2xl`}>
                     {movie.title}
                   </h2>
-                  <h3 className="text-2xl md:text-3xl font-light text-gray-300 tracking-widest">
+                  <h3 className="text-2xl md:text-3xl font-light text-gray-200 tracking-widest drop-shadow-lg">
                     {movie.subtitle}
                   </h3>
                 </div>
@@ -135,7 +129,7 @@ const ModernMovieWelcome = () => {
             </div>
           </div>
 
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
             Step into a world where every frame tells a story. Discover, explore, and experience cinema like never before.
           </p>
         </div>
@@ -143,10 +137,10 @@ const ModernMovieWelcome = () => {
         {/* CTA Button */}
         <div className={`transform transition-all duration-1000 delay-600 ${
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
+        }`} style={{ pointerEvents: 'auto' }}>
           <button 
             onClick={() => window.location.href = '/movies'}
-            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-white rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/20 focus:outline-none focus:ring-4 focus:ring-white/50 overflow-hidden"
+            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-white rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/30 focus:outline-none focus:ring-4 focus:ring-white/50 overflow-hidden backdrop-blur-sm"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-white to-gray-200 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></span>
             <span className="relative flex items-center">
@@ -160,7 +154,7 @@ const ModernMovieWelcome = () => {
         {/* Feature Pills */}
         <div className={`mt-16 flex flex-wrap justify-center gap-4 transform transition-all duration-1000 delay-800 ${
           isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-        }`}>
+        }`} style={{ pointerEvents: 'auto' }}>
           {[
             { icon: '🎬', text: 'Latest Releases' },
             { icon: '⭐', text: 'Top Rated' },
@@ -169,7 +163,7 @@ const ModernMovieWelcome = () => {
           ].map((feature, index) => (
             <div 
               key={index}
-              className="flex items-center px-4 py-2 text-sm font-medium text-gray-300 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-default group"
+              className="flex items-center px-4 py-2 text-sm font-medium text-gray-200 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default group shadow-lg"
             >
               <span className="mr-2 group-hover:scale-110 transition-transform duration-300">
                 {feature.icon}
@@ -180,13 +174,13 @@ const ModernMovieWelcome = () => {
         </div>
 
         {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2" style={{ pointerEvents: 'auto' }}>
           {heroMovies.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide ? 'bg-white w-8' : 'bg-white/30'
+              className={`w-2 h-2 rounded-full transition-all duration-300 backdrop-blur-sm ${
+                index === currentSlide ? 'bg-white w-8 shadow-lg shadow-white/30' : 'bg-white/40'
               }`}
             />
           ))}
