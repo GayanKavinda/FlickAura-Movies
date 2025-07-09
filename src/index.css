@@ -72,4 +72,8 @@ video {
   z-index: -1; /* Places the video behind other content */
 }
 
+/* Hide scrollbars for elements with .scrollbar-hide */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Additional styles can be added here */
