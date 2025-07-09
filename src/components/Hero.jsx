@@ -13,6 +13,7 @@ import {
   Plus,
   Bookmark,
 } from "lucide-react";
+import { FaYoutube } from "react-icons/fa";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
@@ -36,6 +37,8 @@ const CreativeMovieSlider = () => {
   const sidebarObserver = useRef();
   const sidebarRefs = useRef([]);
   const sidebarContainerRef = useRef(null);
+  const [showVideoPopup, setShowVideoPopup] = useState(false);
+  const [videoKey, setVideoKey] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -216,6 +219,23 @@ const CreativeMovieSlider = () => {
 
   const currentMovie = movies[currentSlide];
 
+  const fetchTrailerKey = async (movieId) => {
+    try {
+      const res = await fetch(
+        `${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`
+      );
+      const data = await res.json();
+      // Find the first YouTube trailer video
+      const trailer = data.results.find(
+        (vid) => vid.site === "YouTube" && vid.type === "Trailer"
+      );
+      return trailer ? trailer.key : null;
+    } catch (error) {
+      console.error("Failed to fetch trailer", error);
+      return null;
+    }
+  };
+
   return (
     <div className="relative w-full h-[calc(100vh-64px)] md:h-screen overflow-hidden bg-black pt-4 md:pt-0 pb-0">
       <div className="absolute inset-0">
@@ -376,8 +396,19 @@ const CreativeMovieSlider = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-nowrap gap-3 mt-4 items-center">
-                <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-xs sm:text-base">
-                  <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
+                <button
+                  onClick={async () => {
+                    const key = await fetchTrailerKey(currentMovie.id);
+                    if (key) {
+                      setVideoKey(key);
+                      setShowVideoPopup(true);
+                    } else {
+                      alert("Trailer not available");
+                    }
+                  }}
+                  className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-xs sm:text-base"
+                >
+                  <FaYoutube className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
                   <span className="font-semibold">Play Now</span>
                 </button>
 
@@ -437,6 +468,36 @@ const CreativeMovieSlider = () => {
                 </div>
               </div>
             </div>
+
+            {/* Youtube Video Popup */}
+            {showVideoPopup && (
+              <div
+                className={`fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 modal-enter modal-enter-active`}
+                onClick={() => setShowVideoPopup(false)}
+              >
+                <div
+                  className={`relative w-full max-w-4xl aspect-video bg-black rounded-lg overflow-hidden modal-enter modal-enter-active`}
+                  onClick={(e) => e.stopPropagation()} // Prevent closing modal when clicking inside video box
+                >
+                  <button
+                    onClick={() => setShowVideoPopup(false)}
+                    className="absolute top-2 right-2 z-50 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition"
+                    aria-label="Close video"
+                  >
+                    ✕
+                  </button>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&controls=1`}
+                    title="YouTube Trailer"
+                    frameBorder="0"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Right Sidebar - Desktop Only */}
             {!isMobile && (
