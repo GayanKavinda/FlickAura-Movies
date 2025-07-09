@@ -45,31 +45,50 @@ const CreativeMovieSlider = () => {
           `${TMDB_BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=${page}`
         );
         const data = await res.json();
-        const mapped = data.results.slice(0, 8).map((m) => ({
-          id: m.id,
-          title: m.title,
-          backdrop: m.backdrop_path
-            ? `${IMAGE_BASE_URL}${m.backdrop_path}`
-            : "",
-          poster: m.poster_path ? `${POSTER_BASE_URL}${m.poster_path}` : "",
-          rating: m.vote_average?.toFixed(1) ?? "N/A",
-          year: m.release_date ? m.release_date.slice(0, 4) : "",
-          duration: m.runtime
-            ? `${Math.floor(m.runtime / 60)}h ${m.runtime % 60}m`
-            : "N/A",
-          genre: m.genre_ids?.length ? m.genre_ids.join(", ") : "",
-          overview: m.overview,
-          popularity: m.popularity,
-          voteCount: m.vote_count,
-        }));
-        setMovies(mapped);
+
+        const movieDetails = await Promise.all(
+          data.results.slice(0, 8).map(async (m) => {
+            const detailRes = await fetch(
+              `${TMDB_BASE_URL}/movie/${m.id}?api_key=${API_KEY}&language=en-US`
+            );
+            const details = await detailRes.json();
+
+            return {
+              id: m.id,
+              title: m.title,
+              backdrop: m.backdrop_path
+                ? `${IMAGE_BASE_URL}${m.backdrop_path}`
+                : "",
+              poster: m.poster_path ? `${POSTER_BASE_URL}${m.poster_path}` : "",
+              rating: m.vote_average?.toFixed(1) ?? "N/A",
+              year: m.release_date ? m.release_date.slice(0, 4) : "",
+              duration: details.runtime
+                ? `${Math.floor(details.runtime / 60)}h ${
+                    details.runtime % 60
+                  }m`
+                : "N/A",
+              genre: details.genres?.map((g) => g.name).join(", ") || "N/A",
+              overview: m.overview,
+              popularity: m.popularity,
+              voteCount: m.vote_count,
+              budget: details.budget || 0,
+              revenue: details.revenue || 0,
+              status: details.status || "",
+              language: details.original_language || "",
+            };
+          })
+        );
+
+        setMovies(movieDetails);
         setHasMore(data.page < data.total_pages);
-      } catch {
+      } catch (err) {
+        console.error("Fetch error:", err);
         setMovies([]);
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchMovies();
   }, [page]);
 
@@ -231,70 +250,124 @@ const CreativeMovieSlider = () => {
         ))}
       </div>
 
-      {/* Mobile Header - Simplified */}
-      {isMobile && (
-        <div className="absolute top-0 left-0 right-0 z-30 px-4 py-4">
-          <div className="flex justify-center">
-            <div
-              onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className={`flex items-center space-x-2 px-3 py-1 rounded-full cursor-pointer transition-all duration-300 ${
-                isAutoPlaying
-                  ? "bg-green-500/20 text-green-300"
-                  : "bg-gray-500/20 text-gray-300"
-              }`}
-            >
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
-                }`}
-              ></div>
-              <span className="text-xs font-semibold">
-                {isAutoPlaying ? "Auto Play" : "Manual"}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2">
-        <div className="container mx-auto px-10 sm:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-            {/* Left Content - Full width on mobile */}
-            <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 mt-0 sm:mt-0 px-2 sm:px-0">
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-purple-300 font-medium">
-                  <span className="px-2 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
-                    NOW PLAYING
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
-                    <span>{currentMovie.rating}</span>
-                  </span>
-                  <span>{currentMovie.year}</span>
-                </div>
-
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                  {currentMovie.title}
-                </h1>
-
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-white/70 text-xs sm:text-sm">
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{currentMovie.duration}</span>
-                  </div>
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{currentMovie.year}</span>
-                  </div>
-                </div>
-
-                <p className="text-md sm:text-lg text-purple-200 font-medium mb-2">
-                  {currentMovie.genre}
-                </p>
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+              {/* Tags + Rating */}
+              <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-white/80 font-medium">
+                <span className="px-2 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
+                  NOW PLAYING
+                </span>
+                <span className="flex items-center space-x-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span>{currentMovie.rating}</span>
+                </span>
+                <span>{currentMovie.year}</span>
               </div>
 
-              <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl mb-4">
+              {/* Title */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                {currentMovie.title}
+              </h1>
+
+              {/* Metadata Badges with Small Purple Gradient */}
+              <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
+                {/* Duration Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  ⏱ <span>{currentMovie.duration}</span>
+                </span>
+
+                {/* Year Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  📅 <span>{currentMovie.year}</span>
+                </span>
+
+                {/* Language Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Lang: <span>{currentMovie.language?.toUpperCase()}</span>
+                </span>
+
+                {/* Status Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Status: <span>{currentMovie.status}</span>
+                </span>
+
+                {/* Budget Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Budget:{" "}
+                  <span>${Math.round(currentMovie.budget / 1_000_000)}M</span>
+                </span>
+
+                {/* Revenue Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Revenue:{" "}
+                  <span>${Math.round(currentMovie.revenue / 1_000_000)}M</span>
+                </span>
+
+                {/* Mobile Header - Simplified badge placed next to Revenue */}
+                {isMobile && (
+                  <div
+                    onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                    className={`flex items-center space-x-2 px-3 py-1 rounded-full cursor-pointer transition-all duration-300
+      ${
+        isAutoPlaying
+          ? "bg-green-500/20 text-green-300"
+          : "bg-gray-500/20 text-gray-300"
+      }`}
+                    style={{ userSelect: "none" }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        setIsAutoPlaying(!isAutoPlaying);
+                      }
+                    }}
+                    aria-label={
+                      isAutoPlaying ? "Switch to Manual" : "Switch to Auto Play"
+                    }
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        isAutoPlaying
+                          ? "bg-green-400 animate-pulse"
+                          : "bg-gray-400"
+                      }`}
+                    />
+                    <span className="text-xs font-semibold">
+                      {isAutoPlaying ? "Auto Play" : "Manual"}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Genre */}
+              <p className="mt-2 text-xs sm:text-sm text-purple-300 select-text">
+                {currentMovie.genre}
+              </p>
+
+              {/* Overview */}
+              <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl">
                 {showDetails
                   ? currentMovie.overview
                   : `${
@@ -314,10 +387,12 @@ const CreativeMovieSlider = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 mt-4 sm:mt-6 items-center">
+              <div className="flex flex-wrap gap-3 mt-4 items-center">
                 <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
                   <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold text-sm sm:text-base">Play Now</span>
+                  <span className="font-semibold text-sm sm:text-base">
+                    Play Now
+                  </span>
                 </button>
 
                 <div className="flex gap-2 sm:gap-3 items-center">
@@ -326,7 +401,9 @@ const CreativeMovieSlider = () => {
                     className="group bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-3 py-2 sm:px-4 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 border border-white/20 hover:border-white/40"
                   >
                     <Info className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="font-semibold text-sm">{showDetails ? "Less" : "More"}</span>
+                    <span className="font-semibold text-sm">
+                      {showDetails ? "Less" : "More"}
+                    </span>
                   </button>
 
                   <button
@@ -336,11 +413,17 @@ const CreativeMovieSlider = () => {
                         ? "bg-red-500 text-white"
                         : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
                     }`}
-                    aria-label={likedMovies.has(currentMovie.id) ? "Unlike movie" : "Like movie"}
+                    aria-label={
+                      likedMovies.has(currentMovie.id)
+                        ? "Unlike movie"
+                        : "Like movie"
+                    }
                   >
                     <Heart
                       className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
-                        likedMovies.has(currentMovie.id) ? "fill-current scale-110" : "group-hover:scale-110"
+                        likedMovies.has(currentMovie.id)
+                          ? "fill-current scale-110"
+                          : "group-hover:scale-110"
                       }`}
                     />
                   </button>
@@ -356,7 +439,10 @@ const CreativeMovieSlider = () => {
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/20 bg-white/10 transform transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:rotate-3">
                       <img
                         key={currentMovie.poster}
-                        src={currentMovie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+                        src={
+                          currentMovie.poster ||
+                          "https://via.placeholder.com/300x450?text=No+Image"
+                        }
                         alt={currentMovie.title}
                         className="object-cover w-full h-full opacity-0 fade-in"
                       />
