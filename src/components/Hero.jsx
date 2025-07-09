@@ -52,7 +52,9 @@ const CreativeMovieSlider = () => {
         const mapped = data.results.slice(0, 8).map((m) => ({
           id: m.id,
           title: m.title,
-          backdrop: m.backdrop_path ? `${IMAGE_BASE_URL}${m.backdrop_path}` : "",
+          backdrop: m.backdrop_path
+            ? `${IMAGE_BASE_URL}${m.backdrop_path}`
+            : "",
           poster: m.poster_path ? `${POSTER_BASE_URL}${m.poster_path}` : "",
           rating: m.vote_average?.toFixed(1) ?? "N/A",
           year: m.release_date ? m.release_date.slice(0, 4) : "",
@@ -79,10 +81,10 @@ const CreativeMovieSlider = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleSlideChange = (direction) => {
@@ -99,13 +101,17 @@ const CreativeMovieSlider = () => {
       setCurrentSlide((prev) => (prev - 1 + movies.length) % movies.length);
     }
 
-    transitionRef.current = setTimeout(() => {
-      setIsTransitioning(false);
-    }, isMobile ? 500 : 800); // Faster transition on mobile
+    transitionRef.current = setTimeout(
+      () => {
+        setIsTransitioning(false);
+      },
+      isMobile ? 500 : 800
+    ); // Faster transition on mobile
   };
 
   const goToSlide = (index) => {
-    if (isTransitioning || movies.length === 0 || index === currentSlide) return;
+    if (isTransitioning || movies.length === 0 || index === currentSlide)
+      return;
 
     setIsTransitioning(true);
     setShowDetails(false);
@@ -113,13 +119,16 @@ const CreativeMovieSlider = () => {
     clearTimeout(transitionRef.current);
     setCurrentSlide(index);
 
-    transitionRef.current = setTimeout(() => {
-      setIsTransitioning(false);
-    }, isMobile ? 500 : 800);
+    transitionRef.current = setTimeout(
+      () => {
+        setIsTransitioning(false);
+      },
+      isMobile ? 500 : 800
+    );
   };
 
   const toggleLike = (movieId) => {
-    setLikedMovies(prev => {
+    setLikedMovies((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(movieId)) {
         newSet.delete(movieId);
@@ -131,25 +140,52 @@ const CreativeMovieSlider = () => {
   };
 
   useEffect(() => {
-    if (isAutoPlaying && movies.length > 0 && !isTransitioning && !showDetails && !showMobileMenu) {
-      autoPlayRef.current = setTimeout(() => {
-        handleSlideChange("next");
-      }, isMobile ? 8000 : 6000); // Slower auto-play on mobile
+    if (
+      isAutoPlaying &&
+      movies.length > 0 &&
+      !isTransitioning &&
+      !showDetails &&
+      !showMobileMenu
+    ) {
+      autoPlayRef.current = setTimeout(
+        () => {
+          handleSlideChange("next");
+        },
+        isMobile ? 8000 : 6000
+      ); // Slower auto-play on mobile
       return () => clearTimeout(autoPlayRef.current);
     }
-  }, [isAutoPlaying, currentSlide, movies.length, isTransitioning, showDetails, showMobileMenu, isMobile]);
+  }, [
+    isAutoPlaying,
+    currentSlide,
+    movies.length,
+    isTransitioning,
+    showDetails,
+    showMobileMenu,
+    isMobile,
+  ]);
 
   useEffect(() => {
-    sidebarRefs.current = movies.map((_, i) => sidebarRefs.current[i] || createRef());
+    sidebarRefs.current = movies.map(
+      (_, i) => sidebarRefs.current[i] || createRef()
+    );
   }, [movies]);
 
   useEffect(() => {
-    if (!isMobile && sidebarRefs.current[currentSlide]?.current && sidebarContainerRef.current) {
+    if (
+      !isMobile &&
+      sidebarRefs.current[currentSlide]?.current &&
+      sidebarContainerRef.current
+    ) {
       const node = sidebarRefs.current[currentSlide].current;
       const container = sidebarContainerRef.current;
       const containerRect = container.getBoundingClientRect();
       const nodeRect = node.getBoundingClientRect();
-      const offset = nodeRect.top - containerRect.top - containerRect.height / 2 + nodeRect.height / 2;
+      const offset =
+        nodeRect.top -
+        containerRect.top -
+        containerRect.height / 2 +
+        nodeRect.height / 2;
       container.scrollBy({ top: offset, behavior: "smooth" });
     }
   }, [currentSlide, isMobile]);
@@ -159,7 +195,9 @@ const CreativeMovieSlider = () => {
       <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center">
         <div className="text-center px-4">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
-          <div className="text-white text-xl font-light">Loading cinematic experience...</div>
+          <div className="text-white text-xl font-light">
+            Loading cinematic experience...
+          </div>
         </div>
       </div>
     );
@@ -175,14 +213,24 @@ const CreativeMovieSlider = () => {
           <div
             key={movie.id}
             className={`absolute inset-0 transition-all duration-1000 ease-out ${
-              index === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-110"
+              index === currentSlide
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-110"
             }`}
           >
             <div
               className="absolute inset-0 bg-cover bg-center transition-transform duration-1000"
               style={{
                 backgroundImage: `url(${movie.backdrop})`,
-                transform: `scale(${index === currentSlide ? (isMobile ? 1.05 : 1.1) : (isMobile ? 1.1 : 1.2)})`,
+                transform: `scale(${
+                  index === currentSlide
+                    ? isMobile
+                      ? 1.05
+                      : 1.1
+                    : isMobile
+                    ? 1.1
+                    : 1.2
+                })`,
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
@@ -198,19 +246,33 @@ const CreativeMovieSlider = () => {
           <div className="flex items-center justify-between">
             {/* Auto/Manual Badge */}
             <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"}`}></div>
-              <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${isAutoPlaying ? "bg-green-500/20 text-green-300" : "bg-gray-500/20 text-gray-300"}`}>
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
+                }`}
+              ></div>
+              <span
+                className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
+                  isAutoPlaying
+                    ? "bg-green-500/20 text-green-300"
+                    : "bg-gray-500/20 text-gray-300"
+                }`}
+              >
                 {isAutoPlaying ? "Auto" : "Manual"}
               </span>
             </div>
 
             {/* Menu Toggle Button */}
-            <button 
+            <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
               aria-label="Toggle menu"
             >
-              {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {showMobileMenu ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
@@ -218,13 +280,15 @@ const CreativeMovieSlider = () => {
 
       {/* Mobile Side Menu */}
       {isMobile && (
-        <div className={`fixed top-0 right-0 h-full w-4/5 max-w-xs bg-black/95 backdrop-blur-md z-40 transform transition-transform duration-300 ease-in-out ${
-          showMobileMenu ? 'translate-x-0' : 'translate-x-full'
-        } flex flex-col shadow-2xl`}>
+        <div
+          className={`fixed top-0 right-0 h-full w-4/5 max-w-xs bg-black/95 backdrop-blur-md z-40 transform transition-transform duration-300 ease-in-out ${
+            showMobileMenu ? "translate-x-0" : "translate-x-full"
+          } flex flex-col shadow-2xl`}
+        >
           <div className="p-4 border-b border-white/10">
             <div className="flex items-center justify-between">
               <h3 className="text-white text-lg font-bold">Featured Movies</h3>
-              <button 
+              <button
                 onClick={() => setShowMobileMenu(false)}
                 className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
                 aria-label="Close menu"
@@ -233,7 +297,7 @@ const CreativeMovieSlider = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-3 space-y-2 scrollbar-hide">
             {movies.map((movie, index) => (
               <div
@@ -252,7 +316,10 @@ const CreativeMovieSlider = () => {
                   <div className="flex space-x-2 p-2">
                     <div className="relative flex-shrink-0 w-14 h-20">
                       <img
-                        src={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+                        src={
+                          movie.poster ||
+                          "https://via.placeholder.com/300x450?text=No+Image"
+                        }
                         alt={movie.title}
                         className="w-full h-full object-cover rounded"
                       />
@@ -260,7 +327,7 @@ const CreativeMovieSlider = () => {
                         <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                       )}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-white text-sm mb-1 truncate">
                         {movie.title}
@@ -286,7 +353,7 @@ const CreativeMovieSlider = () => {
 
       {/* Mobile Overlay */}
       {isMobile && showMobileMenu && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 z-35 backdrop-blur-sm"
           onClick={() => setShowMobileMenu(false)}
         ></div>
@@ -294,12 +361,10 @@ const CreativeMovieSlider = () => {
 
       {/* Main Content */}
       <div className="relative z-10 h-full flex items-center px-8 sm:px-6 sm:py-10 py-4">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-10">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-            
+        <div className="container mx-auto px-10 sm:px-12 lg:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 mt-0 sm:mt-0 px-2 sm:px-0">
-
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-purple-300 font-medium">
                   <span className="px-2 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
@@ -311,11 +376,11 @@ const CreativeMovieSlider = () => {
                   </span>
                   <span>{currentMovie.year}</span>
                 </div>
-                
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+
+                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
                   {currentMovie.title}
                 </h1>
-                
+
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-white/70 text-xs sm:text-sm">
                   <div className="flex items-center space-x-1 sm:space-x-2">
                     <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -326,14 +391,23 @@ const CreativeMovieSlider = () => {
                     <span>{currentMovie.year}</span>
                   </div>
                 </div>
-                
-                <p className="text-sm sm:text-base text-purple-200 font-medium">{currentMovie.genre}</p>
+
+                <p className="text-md sm:text-lg text-purple-200 font-medium mb-2">
+                  {currentMovie.genre}
+                </p>
               </div>
 
-              <p className="text-white/80 text-sm sm:text-base leading-relaxed max-w-2xl">
-                {showDetails ? currentMovie.overview : `${currentMovie.overview?.substring(0, isMobile ? 100 : 120) || ""}...`}
+              <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl mb-4">
+                {showDetails
+                  ? currentMovie.overview
+                  : `${
+                      currentMovie.overview?.substring(
+                        0,
+                        isMobile ? 100 : 120
+                      ) || ""
+                    }...`}
                 {!showDetails && (
-                  <button 
+                  <button
                     onClick={() => setShowDetails(true)}
                     className="ml-1 text-purple-300 hover:text-purple-400 text-sm font-medium"
                   >
@@ -343,56 +417,89 @@ const CreativeMovieSlider = () => {
               </p>
 
               {/* Action Buttons - Stacked on mobile */}
-              <div className="flex flex-wrap gap-2 sm:gap-3">
-                <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
-                  <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold text-sm sm:text-base">Play Now</span>
-                </button>
-                
-                <div className="flex gap-2 sm:gap-3">
-                  <button 
-                    onClick={() => setShowDetails(!showDetails)}
-                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-3 py-2 sm:px-4 sm:py-3 rounded-full flex items-center space-x-2 transition-all duration-300 border border-white/20 hover:border-white/40"
-                  >
-                    <Info className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-semibold text-sm">{showDetails ? "Less" : "More"}</span>
-                  </button>
-                  
-                  <button 
-                    onClick={() => toggleLike(currentMovie.id)}
-                    className={`p-2 sm:p-3 rounded-full transition-all duration-300 ${
-                      likedMovies.has(currentMovie.id) 
-                        ? "bg-red-500 text-white" 
-                        : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
-                    }`}
-                    aria-label={likedMovies.has(currentMovie.id) ? "Unlike movie" : "Like movie"}
-                  >
-                    <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${likedMovies.has(currentMovie.id) ? "fill-current" : ""}`} />
-                  </button>
-                  
-                  <button className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 border border-white/20">
-                    <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </button>
-                </div>
-              </div>
+              <div className="flex flex-wrap gap-3 mt-4 sm:mt-6 items-center">
+  {/* Play Now Button */}
+  <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
+    <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
+    <span className="font-semibold text-sm sm:text-base">Play Now</span>
+  </button>
+
+  {/* Details, Like, Add Buttons */}
+  <div className="flex gap-2 sm:gap-3 items-center">
+    {/* More/Less Button */}
+    <button
+      onClick={() => setShowDetails(!showDetails)}
+      className="group bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-3 py-2 sm:px-4 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 border border-white/20 hover:border-white/40"
+    >
+      <Info className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
+      <span className="font-semibold text-sm">{showDetails ? "Less" : "More"}</span>
+    </button>
+
+    {/* Like Button */}
+    <button
+      onClick={() => toggleLike(currentMovie.id)}
+      className={`group p-2 sm:p-3 rounded-full transition-transform duration-300 transform hover:scale-105 ${
+        likedMovies.has(currentMovie.id)
+          ? "bg-red-500 text-white"
+          : "bg-white/10 hover:bg-white/20 text-white border border-white/20"
+      }`}
+      aria-label={likedMovies.has(currentMovie.id) ? "Unlike movie" : "Like movie"}
+    >
+      <Heart
+        className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${
+          likedMovies.has(currentMovie.id) ? "fill-current scale-110" : "group-hover:scale-110"
+        }`}
+      />
+    </button>
+
+    {/* Add/Watchlist Button with Animated Icon */}
+    <div className="group relative flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105">
+      <button
+        className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 border border-white/20"
+        aria-label="Add to Watchlist"
+      >
+        <Plus className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:rotate-90" />
+      </button>
+
+      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/20 bg-white/10 transform transition-transform duration-500 ease-in-out group-hover:scale-110 group-hover:rotate-3">
+      <img
+  key={currentMovie.poster}
+  src={currentMovie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+  alt={currentMovie.title}
+  className="object-cover w-full h-full opacity-0 fade-in"
+/>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
               {/* Additional Details - Simplified on mobile */}
               {showDetails && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 p-3 sm:p-4 bg-black/30 backdrop-blur-md rounded-lg sm:rounded-xl border border-white/10">
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">{currentMovie.rating}</div>
+                    <div className="text-lg sm:text-xl font-bold text-white">
+                      {currentMovie.rating}
+                    </div>
                     <div className="text-xs text-white/60">Rating</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">{Math.round(currentMovie.popularity)}</div>
+                    <div className="text-lg sm:text-xl font-bold text-white">
+                      {Math.round(currentMovie.popularity)}
+                    </div>
                     <div className="text-xs text-white/60">Popularity</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">{currentMovie.voteCount?.toLocaleString()}</div>
+                    <div className="text-lg sm:text-xl font-bold text-white">
+                      {currentMovie.voteCount?.toLocaleString()}
+                    </div>
                     <div className="text-xs text-white/60">Votes</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">{currentMovie.year}</div>
+                    <div className="text-lg sm:text-xl font-bold text-white">
+                      {currentMovie.year}
+                    </div>
                     <div className="text-xs text-white/60">Year</div>
                   </div>
                 </div>
@@ -403,17 +510,26 @@ const CreativeMovieSlider = () => {
             {!isMobile && (
               <div className="lg:col-span-5 space-y-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white text-xl font-bold">Featured Movies</h3>
-                  <button 
+                  <h3 className="text-white text-xl font-bold">
+                    Featured Movies
+                  </h3>
+                  <button
                     onClick={() => setIsMuted(!isMuted)}
                     className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
                     aria-label={isMuted ? "Unmute" : "Mute"}
                   >
-                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                    {isMuted ? (
+                      <VolumeX className="w-5 h-5" />
+                    ) : (
+                      <Volume2 className="w-5 h-5" />
+                    )}
                   </button>
                 </div>
-                
-                <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide" ref={sidebarContainerRef}>
+
+                <div
+                  className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide"
+                  ref={sidebarContainerRef}
+                >
                   {movies.map((movie, index) => (
                     <div
                       key={movie.id}
@@ -431,7 +547,10 @@ const CreativeMovieSlider = () => {
                         <div className="flex space-x-3 p-3">
                           <div className="relative flex-shrink-0 w-14 h-20">
                             <img
-                              src={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+                              src={
+                                movie.poster ||
+                                "https://via.placeholder.com/300x450?text=No+Image"
+                              }
                               alt={movie.title}
                               className="w-full h-full object-cover rounded-lg"
                             />
@@ -440,12 +559,12 @@ const CreativeMovieSlider = () => {
                               <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                             )}
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <h4 className="font-bold text-white text-sm mb-1 truncate group-hover:text-purple-300 transition-colors">
                               {movie.title}
                             </h4>
-                            
+
                             <div className="flex items-center space-x-2 text-xs text-white/60 mb-1">
                               <span>{movie.year}</span>
                               <div className="flex items-center space-x-1">
@@ -453,13 +572,15 @@ const CreativeMovieSlider = () => {
                                 <span>{movie.rating}</span>
                               </div>
                             </div>
-                            
+
                             <p className="text-xs text-white/50 leading-relaxed group-hover:text-white/70 transition-colors line-clamp-2">
                               {movie.overview}
                             </p>
-                            
+
                             <div className="mt-1.5 flex items-center justify-between">
-                              <span className="text-xs text-purple-300 font-medium">{movie.genre}</span>
+                              <span className="text-xs text-purple-300 font-medium">
+                                {movie.genre}
+                              </span>
                               <div className="flex space-x-1">
                                 <button className="p-1 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200">
                                   <Play className="w-3 h-3" />
@@ -529,7 +650,11 @@ const CreativeMovieSlider = () => {
       {/* Auto-play indicator - Desktop only */}
       {!isMobile && (
         <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center space-x-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
-          <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"}`}></div>
+          <div
+            className={`w-2 h-2 rounded-full ${
+              isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
+            }`}
+          ></div>
           <span className="text-white text-xs sm:text-sm font-medium">
             {isAutoPlaying ? "Auto" : "Manual"}
           </span>
