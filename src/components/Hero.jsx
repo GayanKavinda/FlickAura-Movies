@@ -36,6 +36,7 @@ const CreativeMovieSlider = () => {
   const sidebarObserver = useRef();
   const sidebarRefs = useRef([]);
   const sidebarContainerRef = useRef(null);
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -325,6 +326,15 @@ const CreativeMovieSlider = () => {
                   <span>${Math.round(currentMovie.revenue / 1_000_000)}M</span>
                 </span>
 
+                {/* Votes and Popularity Badges */}
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none">
+                  Votes:{" "}
+                  <span>{currentMovie.voteCount?.toLocaleString() || 0}</span>
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none">
+                  Popularity: <span>{Math.round(currentMovie.popularity)}</span>
+                </span>
+
                 {/* Mobile Header - Simplified badge placed next to Revenue */}
                 {isMobile && (
                   <div
@@ -367,21 +377,27 @@ const CreativeMovieSlider = () => {
               </p>
 
               {/* Overview */}
-              <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl">
-                {showDetails
+              <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl mb-4">
+                {isOverviewExpanded
                   ? currentMovie.overview
                   : `${
-                      currentMovie.overview?.substring(
-                        0,
-                        isMobile ? 100 : 120
-                      ) || ""
+                      currentMovie.overview?.substring(isMobile ? 100 : 120) ||
+                      ""
                     }...`}
-                {!showDetails && (
+                {!isOverviewExpanded && (
                   <button
-                    onClick={() => setShowDetails(true)}
+                    onClick={() => setIsOverviewExpanded(true)}
                     className="ml-1 text-purple-300 hover:text-purple-400 text-sm font-medium"
                   >
                     Read more
+                  </button>
+                )}
+                {isOverviewExpanded && (
+                  <button
+                    onClick={() => setIsOverviewExpanded(false)}
+                    className="ml-1 text-purple-300 hover:text-purple-400 text-sm font-medium"
+                  >
+                    Show less
                   </button>
                 )}
               </p>
@@ -450,36 +466,6 @@ const CreativeMovieSlider = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Additional Details */}
-              {showDetails && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 p-3 sm:p-4 bg-black/30 backdrop-blur-md rounded-lg sm:rounded-xl border border-white/10">
-                  <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">
-                      {currentMovie.rating}
-                    </div>
-                    <div className="text-xs text-white/60">Rating</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">
-                      {Math.round(currentMovie.popularity)}
-                    </div>
-                    <div className="text-xs text-white/60">Popularity</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">
-                      {currentMovie.voteCount?.toLocaleString()}
-                    </div>
-                    <div className="text-xs text-white/60">Votes</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg sm:text-xl font-bold text-white">
-                      {currentMovie.year}
-                    </div>
-                    <div className="text-xs text-white/60">Year</div>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Right Sidebar - Desktop Only */}
