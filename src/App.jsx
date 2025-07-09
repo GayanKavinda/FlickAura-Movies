@@ -40,7 +40,7 @@ function App() {
 
       {/* Only show Footer if not on the Welcome page */}
       {location.pathname === '/movies' && (
-        <div className="p-4 bg-gray-900 min-h-screen overflow-hidden">
+        <div className="p-4 bg-gray-900 overflow-hidden">
           <NowPlaying />
           <Upcoming />
           <TopRated />
