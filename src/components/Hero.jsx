@@ -360,7 +360,7 @@ const CreativeMovieSlider = () => {
       )}
 
       {/* Main Content */}
-      <div className="relative z-10 h-full flex items-center px-8 sm:px-6 sm:py-10 py-4">
+      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] px-8 sm:px-6 py-2">
         <div className="container mx-auto px-10 sm:px-12 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
             {/* Left Content */}
