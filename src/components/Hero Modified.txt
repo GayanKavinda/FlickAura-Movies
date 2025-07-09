@@ -250,107 +250,124 @@ const CreativeMovieSlider = () => {
         ))}
       </div>
 
-      {/* Mobile Header - Simplified */}
-      {isMobile && (
-        <div className="absolute top-0 left-0 right-0 z-30 px-4 py-4">
-          <div className="flex justify-center">
-            <div
-              onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className={`flex items-center space-x-2 px-3 py-1 rounded-full cursor-pointer transition-all duration-300 ${
-                isAutoPlaying
-                  ? "bg-green-500/20 text-green-300"
-                  : "bg-gray-500/20 text-gray-300"
-              }`}
-            >
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
-                }`}
-              ></div>
-              <span className="text-xs font-semibold">
-                {isAutoPlaying ? "Auto Play" : "Manual"}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2">
-        <div className="container mx-auto px-10 sm:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-            {/* Left Content - Full width on mobile */}
-            <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 mt-0 sm:mt-0 px-2 sm:px-0">
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-purple-300 font-medium">
-                  <span className="px-2 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
-                    NOW PLAYING
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
-                    <span>{currentMovie.rating}</span>
-                  </span>
-                  <span>{currentMovie.year}</span>
-                </div>
-
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
-                  {currentMovie.title}
-                </h1>
-
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-white/70 text-xs sm:text-sm">
-                  {/* Duration */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{currentMovie.duration}</span>
-                  </div>
-
-                  {/* Year */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>{currentMovie.year}</span>
-                  </div>
-
-                  {/* Language */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <span className="font-semibold text-purple-300">
-                      Language:
-                    </span>
-                    <span>{currentMovie.language?.toUpperCase()}</span>
-                  </div>
-
-                  {/* Status */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <span className="font-semibold text-purple-300">
-                      Status:
-                    </span>
-                    <span>{currentMovie.status}</span>
-                  </div>
-
-                  {/* Budget */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <span className="font-semibold text-purple-300">
-                      Budget:
-                    </span>
-                    <span>${Math.round(currentMovie.budget / 1_000_000)}M</span>
-                  </div>
-
-                  {/* Revenue */}
-                  <div className="flex items-center space-x-1 sm:space-x-2">
-                    <span className="font-semibold text-purple-300">
-                      Revenue:
-                    </span>
-                    <span>
-                      ${Math.round(currentMovie.revenue / 1_000_000)}M
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-md sm:text-lg text-purple-200 font-medium mb-2">
-                  {currentMovie.genre}
-                </p>
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+              {/* Tags + Rating */}
+              <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-white/80 font-medium">
+                <span className="px-2 py-1 bg-purple-500/20 rounded-full border border-purple-500/30">
+                  NOW PLAYING
+                </span>
+                <span className="flex items-center space-x-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span>{currentMovie.rating}</span>
+                </span>
+                <span>{currentMovie.year}</span>
               </div>
 
-              <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl mb-4">
+              {/* Title */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                {currentMovie.title}
+              </h1>
+
+              {/* Metadata Badges with Small Purple Gradient */}
+              <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
+                {/* Duration Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  ⏱ <span>{currentMovie.duration}</span>
+                </span>
+
+                {/* Year Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  📅 <span>{currentMovie.year}</span>
+                </span>
+
+                {/* Language Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Lang: <span>{currentMovie.language?.toUpperCase()}</span>
+                </span>
+
+                {/* Status Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Status: <span>{currentMovie.status}</span>
+                </span>
+
+                {/* Budget Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Budget:{" "}
+                  <span>${Math.round(currentMovie.budget / 1_000_000)}M</span>
+                </span>
+
+                {/* Revenue Badge */}
+                <span
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full
+    bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none"
+                >
+                  Revenue:{" "}
+                  <span>${Math.round(currentMovie.revenue / 1_000_000)}M</span>
+                </span>
+
+                {/* Mobile Header - Simplified badge placed next to Revenue */}
+                {isMobile && (
+                  <div
+                    onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                    className={`flex items-center space-x-2 px-3 py-1 rounded-full cursor-pointer transition-all duration-300
+      ${
+        isAutoPlaying
+          ? "bg-green-500/20 text-green-300"
+          : "bg-gray-500/20 text-gray-300"
+      }`}
+                    style={{ userSelect: "none" }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        setIsAutoPlaying(!isAutoPlaying);
+                      }
+                    }}
+                    aria-label={
+                      isAutoPlaying ? "Switch to Manual" : "Switch to Auto Play"
+                    }
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        isAutoPlaying
+                          ? "bg-green-400 animate-pulse"
+                          : "bg-gray-400"
+                      }`}
+                    />
+                    <span className="text-xs font-semibold">
+                      {isAutoPlaying ? "Auto Play" : "Manual"}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Genre */}
+              <p className="mt-2 text-xs sm:text-sm text-purple-300 select-text">
+                {currentMovie.genre}
+              </p>
+
+              {/* Overview */}
+              <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-2xl">
                 {showDetails
                   ? currentMovie.overview
                   : `${
@@ -370,7 +387,7 @@ const CreativeMovieSlider = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 mt-4 sm:mt-6 items-center">
+              <div className="flex flex-wrap gap-3 mt-4 items-center">
                 <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
                   <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
                   <span className="font-semibold text-sm sm:text-base">
