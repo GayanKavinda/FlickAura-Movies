@@ -36,7 +36,6 @@ const CreativeMovieSlider = () => {
   const sidebarObserver = useRef();
   const sidebarRefs = useRef([]);
   const sidebarContainerRef = useRef(null);
-  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -326,15 +325,6 @@ const CreativeMovieSlider = () => {
                   <span>${Math.round(currentMovie.revenue / 1_000_000)}M</span>
                 </span>
 
-                {/* Votes and Popularity Badges */}
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none">
-                  Votes:{" "}
-                  <span>{currentMovie.voteCount?.toLocaleString() || 0}</span>
-                </span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-md select-none">
-                  Popularity: <span>{Math.round(currentMovie.popularity)}</span>
-                </span>
-
                 {/* Mobile Header - Simplified badge placed next to Revenue */}
                 {isMobile && (
                   <div
@@ -372,52 +362,32 @@ const CreativeMovieSlider = () => {
               </div>
 
               {/* Genre */}
-              <p className="mt-2 text-xs sm:text-sm text-purple-300 select-text">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-600 text-white shadow-md select-none">
+                <Star className="w-4 h-4 text-yellow-400" />
                 {currentMovie.genre}
-              </p>
+              </span>
 
               {/* Overview */}
-              <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl mb-4">
-                {isOverviewExpanded
-                  ? currentMovie.overview
-                  : `${
-                      currentMovie.overview?.substring(isMobile ? 100 : 120) ||
-                      ""
-                    }...`}
-                {!isOverviewExpanded && (
-                  <button
-                    onClick={() => setIsOverviewExpanded(true)}
-                    className="ml-1 text-purple-300 hover:text-purple-400 text-sm font-medium"
-                  >
-                    Read more
-                  </button>
-                )}
-                {isOverviewExpanded && (
-                  <button
-                    onClick={() => setIsOverviewExpanded(false)}
-                    className="ml-1 text-purple-300 hover:text-purple-400 text-sm font-medium"
-                  >
-                    Show less
-                  </button>
-                )}
-              </p>
+              <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
+                <p className="text-md sm:text-lg text-white/80 leading-relaxed max-w-2xl">
+                  {currentMovie.overview}
+                </p>
+              </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 mt-4 items-center">
-                <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25">
+              <div className="flex flex-nowrap gap-3 mt-4 items-center">
+                <button className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 shadow-lg hover:shadow-red-500/25 text-sm sm:text-base">
                   <Play className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold text-sm sm:text-base">
-                    Play Now
-                  </span>
+                  <span className="font-semibold">Play Now</span>
                 </button>
 
                 <div className="flex gap-2 sm:gap-3 items-center">
                   <button
                     onClick={() => setShowDetails(!showDetails)}
-                    className="group bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-3 py-2 sm:px-4 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 border border-white/20 hover:border-white/40"
+                    className="group bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-3 py-2 sm:px-4 sm:py-3 rounded-full flex items-center space-x-2 transition-transform duration-300 transform hover:scale-105 border border-white/20 hover:border-white/40 text-sm sm:text-sm"
                   >
                     <Info className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="font-semibold text-sm">
+                    <span className="font-semibold">
                       {showDetails ? "Less" : "More"}
                     </span>
                   </button>
