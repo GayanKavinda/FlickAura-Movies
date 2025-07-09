@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       {/* Only show Navbar if not on the Welcome page */}
-      {/* {location.pathname !== '/' && <Navbar />} */}
+      {location.pathname !== '/' && <Navbar />}
       {/* Only show Hero on /movies */}
       {location.pathname === '/movies' && <Hero />}
       <Routes>
