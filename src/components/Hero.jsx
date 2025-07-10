@@ -60,11 +60,9 @@ const CreativeMovieSlider = () => {
       if (distance > 0) {
         // Swiped left
         handleSlideChange("next");
-        console.log("Swiped Right");
       } else {
         // Swiped right
         handleSlideChange("prev");
-        console.log("Swiped Left");
       }
     }
   };
@@ -300,13 +298,8 @@ const CreativeMovieSlider = () => {
       </div>
 
       {/* Main Content */}
-      <div
-  className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2"
-  onTouchStart={handleTouchStart}
-  onTouchMove={handleTouchMove}
-  onTouchEnd={handleTouchEnd}
->
-          <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2">
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-4 sm:space-y-6">
