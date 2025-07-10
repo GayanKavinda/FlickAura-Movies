@@ -463,11 +463,9 @@ const ModernSearch = () => {
               </form>
             </div>
 
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
-                  Search Results
-                </h1>
+            <div className="flex items-center justify-between mb-6 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Search Results</h1>
                 <p className="text-gray-300 drop-shadow-md">
                   {searchQuery
                     ? `Found ${totalResults} movies for "${searchQuery}"`
@@ -531,14 +529,10 @@ const ModernSearch = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Year
-                    </label>
+                    <label className="block text-gray-300 text-sm mb-2">Year</label>
                     <select
                       value={filters.year}
-                      onChange={(e) =>
-                        handleFilterChange("year", e.target.value)
-                      }
+                      onChange={(e) => handleFilterChange("year", e.target.value)}
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Years</option>
@@ -553,14 +547,10 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Genre
-                    </label>
+                    <label className="block text-gray-300 text-sm mb-2">Genre</label>
                     <select
                       value={filters.genre}
-                      onChange={(e) =>
-                        handleFilterChange("genre", e.target.value)
-                      }
+                      onChange={(e) => handleFilterChange("genre", e.target.value)}
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Genres</option>
@@ -572,14 +562,10 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Rating
-                    </label>
+                    <label className="block text-gray-300 text-sm mb-2">Rating</label>
                     <select
                       value={filters.rating}
-                      onChange={(e) =>
-                        handleFilterChange("rating", e.target.value)
-                      }
+                      onChange={(e) => handleFilterChange("rating", e.target.value)}
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Ratings</option>
@@ -591,9 +577,7 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Sort By
-                    </label>
+                    <label className="block text-gray-300 text-sm mb-2">Sort By</label>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
@@ -617,9 +601,7 @@ const ModernSearch = () => {
             <div className="flex items-center justify-center min-h-64">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                <p className="text-gray-300 drop-shadow-md">
-                  Searching for movies...
-                </p>
+                <p className="text-gray-300 drop-shadow-md">Searching for movies...</p>
               </div>
             </div>
           ) : results.length === 0 ? (
@@ -627,12 +609,8 @@ const ModernSearch = () => {
               <div className="w-24 h-24 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-700/50">
                 <Search className="w-12 h-12 text-gray-400" />
               </div>
-              <h3 className="text-white text-xl font-semibold mb-2 drop-shadow-lg">
-                No results found
-              </h3>
-              <p className="text-gray-300 drop-shadow-md">
-                Try adjusting your search terms or filters
-              </p>
+              <h3 className="text-white text-xl font-semibold mb-2 drop-shadow-lg">No results found</h3>
+              <p className="text-gray-300 drop-shadow-md">Try adjusting your search terms or filters</p>
             </div>
           ) : (
             <>
@@ -644,9 +622,7 @@ const ModernSearch = () => {
               {totalResults > 20 && (
                 <div className="flex flex-col sm:flex-row items-center justify-center mt-8 gap-2 sm:gap-4">
                   <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(1, prev - 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                     className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
                   >
@@ -655,31 +631,29 @@ const ModernSearch = () => {
                   </button>
 
                   <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full">
-                    {[...Array(Math.min(5, Math.ceil(totalResults / 20)))].map(
-                      (_, index) => {
-                        const pageNumber =
-                          currentPage <= 3
-                            ? index + 1
-                            : currentPage - 2 + index;
-                        const totalPages = Math.ceil(totalResults / 20);
+                    {[...Array(Math.min(5, Math.ceil(totalResults / 20)))].map((_, index) => {
+                      const pageNumber =
+                        currentPage <= 3
+                          ? index + 1
+                          : currentPage - 2 + index;
+                      const totalPages = Math.ceil(totalResults / 20);
 
-                        if (pageNumber > totalPages) return null;
+                      if (pageNumber > totalPages) return null;
 
-                        return (
-                          <button
-                            key={pageNumber}
-                            onClick={() => setCurrentPage(pageNumber)}
-                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer ${
-                              currentPage === pageNumber
-                                ? "bg-purple-600 text-white border-purple-500"
-                                : "bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50"
-                            }`}
-                          >
-                            {pageNumber}
-                          </button>
-                        );
-                      }
-                    )}
+                      return (
+                        <button
+                          key={pageNumber}
+                          onClick={() => setCurrentPage(pageNumber)}
+                          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer ${
+                            currentPage === pageNumber
+                              ? "bg-purple-600 text-white border-purple-500"
+                              : "bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50"
+                          }`}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <button
@@ -700,9 +674,8 @@ const ModernSearch = () => {
               {/* Results info */}
               <div className="text-center mt-8 text-gray-300 drop-shadow-md">
                 <p>
-                  Showing {(currentPage - 1) * 20 + 1} -{" "}
-                  {Math.min(currentPage * 20, totalResults)} of {totalResults}{" "}
-                  results
+                  Showing {(currentPage - 1) * 20 + 1} - {
+                  Math.min(currentPage * 20, totalResults)} of {totalResults} results
                 </p>
               </div>
             </>
