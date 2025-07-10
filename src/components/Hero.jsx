@@ -789,7 +789,7 @@ const CreativeMovieSlider = () => {
 
       {/* Desktop Controls */}
       {!isMobile && (
-        <div className="absolute top-4 right-4 flex items-center space-x-3 z-20">
+        <div className="absolute top-4 right-4 flex items-center space-x-3 z-20 pt-2">
           <div
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
             className={`flex items-center space-x-2 px-4 py-2 rounded-full cursor-pointer transition-all duration-300 ${
