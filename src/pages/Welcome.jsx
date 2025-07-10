@@ -91,7 +91,7 @@ const ModernMovieWelcome = () => {
         >
           {!isMobile ? (
             <Spline
-              scene="https://prod.spline.design/vAd4XZ8qzDo17oDK/scene.splinecode"
+              scene="https://prod.spline.design/0g2plNMYWcepFCAE/scene.splinecode"
               onLoad={onSplineLoad}
               className="w-full h-full"
               style={{
