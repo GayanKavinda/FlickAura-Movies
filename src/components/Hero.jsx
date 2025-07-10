@@ -36,7 +36,36 @@ const CreativeMovieSlider = () => {
   const autoPlayRef = useRef(null);
   const sidebarRefs = useRef([]);
   const sidebarContainerRef = useRef(null);
-  
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!isMobile || isTransitioning || movies.length === 0) return;
+
+    const distance = touchStartX.current - touchEndX.current;
+    const swipeThreshold = 50; // Minimum distance to be considered swipe
+
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0) {
+        // Swiped left
+        handleSlideChange("next");
+        console.log("Swiped Right");
+      } else {
+        // Swiped right
+        handleSlideChange("prev");
+        console.log("Swiped Left");
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
@@ -267,7 +296,12 @@ const CreativeMovieSlider = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2">
+      <div
+        className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Left Content */}
@@ -386,7 +420,9 @@ const CreativeMovieSlider = () => {
               {/* Overview */}
               <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
                 <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl">
-                  {currentMovie.overview}
+                  {currentMovie.overview && currentMovie.overview.length > 250
+                    ? `${currentMovie.overview.substring(0, 250)}...`
+                    : currentMovie.overview}
                 </p>
               </div>
 
@@ -606,17 +642,20 @@ const CreativeMovieSlider = () => {
         </div>
       )}
 
-      <div className="absolute top-1/2 right-4 sm:right-4 lg:right-8 transform -translate-y-1/2 z-20">
-        <button
-          onClick={() => handleSlideChange("next")}
-          className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
-          onMouseEnter={() => setIsAutoPlaying(false)}
-          onMouseLeave={() => setIsAutoPlaying(true)}
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
-        </button>
-      </div>
+      {/* Hide navigation buttons when video is playing */}
+      {!showVideoPopup && (
+        <div className="absolute top-1/2 right-4 sm:right-4 lg:right-8 transform -translate-y-1/2 z-20">
+          <button
+            onClick={() => handleSlideChange("next")}
+            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
+          </button>
+        </div>
+      )}
 
       {/* Bottom Progress Indicators */}
       <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-1.5 sm:space-x-2.5 z-20">
