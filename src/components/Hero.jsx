@@ -76,7 +76,7 @@ const CreativeMovieSlider = () => {
         const data = await res.json();
 
         const movieDetails = await Promise.all(
-          data.results.slice(0, 8).map(async (m) => {
+          data.results.slice(0, 12).map(async (m) => {
             const detailRes = await fetch(
               `${TMDB_BASE_URL}/movie/${m.id}?api_key=${API_KEY}&language=en-US`
             );
@@ -420,8 +420,10 @@ const CreativeMovieSlider = () => {
               {/* Overview */}
               <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
                 <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl">
-                  {currentMovie.overview && currentMovie.overview.length > 250
-                    ? `${currentMovie.overview.substring(0, 250)}...`
+                  {isMobile
+                    ? (currentMovie.overview && currentMovie.overview.length > 250
+                      ? `${currentMovie.overview.substring(0, 250)}...`
+                      : currentMovie.overview)
                     : currentMovie.overview}
                 </p>
               </div>
@@ -632,7 +634,7 @@ const CreativeMovieSlider = () => {
         <div className="absolute top-1/2 left-4 sm:left-4 lg:left-8 transform -translate-y-1/2 z-20 mb-4">
           <button
             onClick={() => handleSlideChange("prev")}
-            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 transform hover:scale-110 border border-white/20"
+            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 transform hover:scale-110 border border-white/20 cursor-pointer"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
             aria-label="Previous slide"
@@ -647,7 +649,7 @@ const CreativeMovieSlider = () => {
         <div className="absolute top-1/2 right-4 sm:right-4 lg:right-8 transform -translate-y-1/2 z-20">
           <button
             onClick={() => handleSlideChange("next")}
-            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 border border-white/20"
+            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 border border-white/20 cursor-pointer"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
             aria-label="Next slide"

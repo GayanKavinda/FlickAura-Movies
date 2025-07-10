@@ -182,7 +182,7 @@ const ModernMovieWelcome = () => {
         >
           <button
             onClick={() => (window.location.href = "/movies")}
-            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-white rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/30 focus:outline-none focus:ring-4 focus:ring-white/50 overflow-hidden backdrop-blur-sm"
+            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-white rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-white/30 focus:outline-none focus:ring-4 focus:ring-white/50 overflow-hidden backdrop-blur-sm cursor-pointer"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-white to-gray-200 rounded-full transform scale-0 group-hover:scale-100 transition-transform duration-300"></span>
             <span className="relative flex items-center">

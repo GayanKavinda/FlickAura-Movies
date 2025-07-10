@@ -9,7 +9,6 @@ import NowPlaying from "./pages/NowPlaying"; // Placeholder
 import Upcoming from "./pages/Upcoming"; // Placeholder
 import TopRated from "./pages/TopRated"; // Placeholder
 import Genre from "./pages/Genre"; // Placeholder
-import FilteredByGenre from "./pages/FilteredByGenre"; // Import the new component
 import TVShows from "./pages/TVShows"; // Placeholder
 import People from "./pages/People"; // Placeholder
 import Watchlist from "./pages/Watchlist"; // Placeholder
@@ -33,7 +32,6 @@ function App() {
         <Route path="/" element={<Welcome />} />
         <Route path="/movies" element={<PopularMovies />} />
         <Route path="/genres" element={<Genre />} />
-        <Route path="/genres/:genreId" element={<FilteredByGenre />} /> {/* Added filtered genre route */}
         <Route path="/movies/:id" element={<MovieDetail />} /> {/* New route for movie details */}
         <Route path="/search" element={<Search />} />
       </Routes>
@@ -44,7 +42,6 @@ function App() {
           <NowPlaying />
           <Upcoming />
           <TopRated />
-          <Genre />
           <TVShows />
           <People />
           <Footer />
