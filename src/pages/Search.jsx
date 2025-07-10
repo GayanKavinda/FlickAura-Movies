@@ -284,8 +284,10 @@ const ModernSearch = () => {
           key={movie.id}
           className="bg-gradient-to-r from-black/70 to-gray-900/70 backdrop-blur-md rounded-2xl border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 overflow-hidden"
         >
-          <div className="flex">
-            <div className="w-32 h-48 flex-shrink-0 relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row">
+            {" "}
+            {/* Added flex-col for mobile stacking */}
+            <div className="w-full sm:w-32 h-48 flex-shrink-0 relative overflow-hidden">
               <img
                 src={
                   movie.poster_path
@@ -296,7 +298,9 @@ const ModernSearch = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-4 sm:p-6">
+              {" "}
+              {/* Adjusted padding for mobile */}
               <div className="flex items-start justify-between mb-3">
                 <h3 className="text-white font-bold text-xl mb-2">
                   {movie.title || "Unknown Title"}
@@ -321,8 +325,12 @@ const ModernSearch = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                {" "}
+                {/* Adjusted for mobile stacking */}
+                <div className="flex flex-wrap gap-2 mb-3 sm:mb-0">
+                  {" "}
+                  {/* Added margin-bottom for mobile */}
                   {(movie.genre_ids || []).slice(0, 3).map((genreId) => (
                     <span
                       key={genreId}
@@ -350,7 +358,9 @@ const ModernSearch = () => {
   );
 
   const CompactView = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {" "}
+      {/* Changed md to sm for better breakpoint */}
       {results.map((movie) => (
         <div
           key={movie.id}
@@ -388,7 +398,9 @@ const ModernSearch = () => {
                 {movie.overview || "No description available"}
               </p>
               <div className="flex items-center justify-between">
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
+                  {" "}
+                  {/* Smaller gap for compact view */}
                   {(movie.genre_ids || []).slice(0, 2).map((genreId) => (
                     <span
                       key={genreId}
@@ -443,7 +455,7 @@ const ModernSearch = () => {
           <div className="max-w-7xl mx-auto px-4 py-6">
             {/* Search Bar */}
             <div className="mb-6">
-              <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto">
+              <form onSubmit={handleSearchSubmit} className="w-full sm:max-w-2xl sm:mx-auto"> {/* Changed max-w-2xl mx-auto to be conditional */}
                 <div className="relative">
                   <input
                     type="text"
@@ -463,17 +475,19 @@ const ModernSearch = () => {
               </form>
             </div>
 
-            <div className="flex items-center justify-between mb-6 flex-wrap">
-              <div className="flex-1 min-w-0">
-                <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Search Results</h1>
-                <p className="text-gray-300 drop-shadow-md">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 sm:gap-0"> {/* Added flex-col and gap for mobile */}
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg text-center sm:text-left"> {/* Centered on mobile */}
+                  Search Results
+                </h1>
+                <p className="text-gray-300 drop-shadow-md text-center sm:text-left"> {/* Centered on mobile */}
                   {searchQuery
                     ? `Found ${totalResults} movies for "${searchQuery}"`
                     : "Enter a search term to find movies"}
                 </p>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-lg p-1 border border-gray-700/50">
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"> {/* Adjusted for mobile stacking */}
+                <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-lg p-1 border border-gray-700/50 w-full justify-center sm:w-auto"> {/* Added w-full and justify-center */}
                   <button
                     onClick={() => setViewMode("grid")}
                     className={`p-2 rounded-md transition-all ${
@@ -507,7 +521,7 @@ const ModernSearch = () => {
                 </div>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm cursor-pointer"
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm cursor-pointer w-full sm:w-auto" // Added w-full and justify-center
                 >
                   <Filter className="w-5 h-5" />
                   <span>Filters</span>
@@ -517,7 +531,7 @@ const ModernSearch = () => {
 
             {/* Filters */}
             {showFilters && (
-              <div className="bg-black/50 backdrop-blur-md rounded-xl border border-gray-700/50 p-6 mb-6">
+              <div className="bg-black/50 backdrop-blur-md rounded-xl border border-gray-700/50 p-4 sm:p-6 mb-6"> {/* Adjusted padding */}
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-white font-semibold text-lg">Filters</h3>
                   <button
@@ -527,12 +541,16 @@ const ModernSearch = () => {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"> {/* Changed md to sm for smaller screens */}
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">Year</label>
+                    <label className="block text-gray-300 text-sm mb-2">
+                      Year
+                    </label>
                     <select
                       value={filters.year}
-                      onChange={(e) => handleFilterChange("year", e.target.value)}
+                      onChange={(e) =>
+                        handleFilterChange("year", e.target.value)
+                      }
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Years</option>
@@ -547,10 +565,14 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">Genre</label>
+                    <label className="block text-gray-300 text-sm mb-2">
+                      Genre
+                    </label>
                     <select
                       value={filters.genre}
-                      onChange={(e) => handleFilterChange("genre", e.target.value)}
+                      onChange={(e) =>
+                        handleFilterChange("genre", e.target.value)
+                      }
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Genres</option>
@@ -562,10 +584,14 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">Rating</label>
+                    <label className="block text-gray-300 text-sm mb-2">
+                      Rating
+                    </label>
                     <select
                       value={filters.rating}
-                      onChange={(e) => handleFilterChange("rating", e.target.value)}
+                      onChange={(e) =>
+                        handleFilterChange("rating", e.target.value)
+                      }
                       className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
                     >
                       <option value="">All Ratings</option>
@@ -577,7 +603,9 @@ const ModernSearch = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">Sort By</label>
+                    <label className="block text-gray-300 text-sm mb-2">
+                      Sort By
+                    </label>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
@@ -601,7 +629,9 @@ const ModernSearch = () => {
             <div className="flex items-center justify-center min-h-64">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                <p className="text-gray-300 drop-shadow-md">Searching for movies...</p>
+                <p className="text-gray-300 drop-shadow-md">
+                  Searching for movies...
+                </p>
               </div>
             </div>
           ) : results.length === 0 ? (
@@ -609,8 +639,12 @@ const ModernSearch = () => {
               <div className="w-24 h-24 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-700/50">
                 <Search className="w-12 h-12 text-gray-400" />
               </div>
-              <h3 className="text-white text-xl font-semibold mb-2 drop-shadow-lg">No results found</h3>
-              <p className="text-gray-300 drop-shadow-md">Try adjusting your search terms or filters</p>
+              <h3 className="text-white text-xl font-semibold mb-2 drop-shadow-lg">
+                No results found
+              </h3>
+              <p className="text-gray-300 drop-shadow-md">
+                Try adjusting your search terms or filters
+              </p>
             </div>
           ) : (
             <>
@@ -622,16 +656,20 @@ const ModernSearch = () => {
               {totalResults > 20 && (
                 <div className="flex flex-col sm:flex-row items-center justify-center mt-8 gap-2 sm:gap-4">
                   <button
-                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(1, prev - 1))
+                    }
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer w-full sm:w-auto justify-center" // Added w-full and justify-center
                   >
                     <ChevronDown className="w-4 h-4 rotate-90" />
                     Prev
                   </button>
 
                   <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full">
-                    {[...Array(Math.min(5, Math.ceil(totalResults / 20)))].map((_, index) => {
+                    {[
+                      ...Array(Math.min(5, Math.ceil(totalResults / 20))),
+                    ].map((_, index) => {
                       const pageNumber =
                         currentPage <= 3
                           ? index + 1
@@ -644,7 +682,7 @@ const ModernSearch = () => {
                         <button
                           key={pageNumber}
                           onClick={() => setCurrentPage(pageNumber)}
-                          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer ${
+                          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer flex-shrink-0 ${ // Added flex-shrink-0
                             currentPage === pageNumber
                               ? "bg-purple-600 text-white border-purple-500"
                               : "bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50"
@@ -663,7 +701,7 @@ const ModernSearch = () => {
                       )
                     }
                     disabled={currentPage >= Math.ceil(totalResults / 20)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 text-sm bg-black/50 hover:bg-black/70 disabled:bg-black/30 disabled:text-gray-500 text-white rounded-lg transition-colors disabled:cursor-not-allowed backdrop-blur-md border border-gray-700/50 cursor-pointer w-full sm:w-auto justify-center" // Added w-full and justify-center
                   >
                     Next
                     <ChevronDown className="w-4 h-4 -rotate-90" />
@@ -674,8 +712,9 @@ const ModernSearch = () => {
               {/* Results info */}
               <div className="text-center mt-8 text-gray-300 drop-shadow-md">
                 <p>
-                  Showing {(currentPage - 1) * 20 + 1} - {
-                  Math.min(currentPage * 20, totalResults)} of {totalResults} results
+                  Showing {(currentPage - 1) * 20 + 1} -{" "}
+                  {Math.min(currentPage * 20, totalResults)} of {totalResults}{" "}
+                  results
                 </p>
               </div>
             </>
