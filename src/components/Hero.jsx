@@ -421,9 +421,10 @@ const CreativeMovieSlider = () => {
               <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
                 <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl">
                   {isMobile
-                    ? (currentMovie.overview && currentMovie.overview.length > 250
+                    ? currentMovie.overview &&
+                      currentMovie.overview.length > 250
                       ? `${currentMovie.overview.substring(0, 250)}...`
-                      : currentMovie.overview)
+                      : currentMovie.overview
                     : currentMovie.overview}
                 </p>
               </div>
