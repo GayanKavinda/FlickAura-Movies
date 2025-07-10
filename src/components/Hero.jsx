@@ -41,13 +41,16 @@ const CreativeMovieSlider = () => {
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
+    console.log('Touch started at:', touchStartX.current);
   };
 
   const handleTouchMove = (e) => {
     touchEndX.current = e.touches[0].clientX;
+    console.log('Touch moved to:', touchEndX.current);
   };
 
   const handleTouchEnd = () => {
+    console.log('Touch ended. Auto-playing:', isAutoPlaying);
     if (!isMobile || isTransitioning || movies.length === 0) return;
 
     const distance = touchStartX.current - touchEndX.current;
@@ -815,65 +818,6 @@ const CreativeMovieSlider = () => {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes progress {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-        
-        .animate-progress {
-          animation: progress ${isMobile ? "8s" : "6s"} linear;
-        }
-        
-        .scrollbar-hide {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        
-        .fade-in {
-          animation: fadeIn 0.8s ease-in-out forwards;
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        
-        .modal-enter {
-          animation: modalEnter 0.3s ease-out forwards;
-        }
-        
-        @keyframes modalEnter {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </div>
   );
 };
