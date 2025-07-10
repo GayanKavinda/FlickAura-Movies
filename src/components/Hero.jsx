@@ -39,7 +39,36 @@ const CreativeMovieSlider = () => {
   const sidebarContainerRef = useRef(null);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [videoKey, setVideoKey] = useState(null);
-
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = () => {
+    if (!isMobile || isTransitioning || movies.length === 0) return;
+  
+    const distance = touchStartX.current - touchEndX.current;
+    const swipeThreshold = 50; // Minimum distance to be considered swipe
+  
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0) {
+        // Swiped left
+        handleSlideChange("next");
+        console.log("Swiped Right");
+      } else {
+        // Swiped right
+        handleSlideChange("prev");
+        console.log("Swiped Left");
+      }
+    }
+  };
+  
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
@@ -271,8 +300,13 @@ const CreativeMovieSlider = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2">
-        <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+      <div
+  className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2"
+  onTouchStart={handleTouchStart}
+  onTouchMove={handleTouchMove}
+  onTouchEnd={handleTouchEnd}
+>
+          <div className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-4 sm:space-y-6">
