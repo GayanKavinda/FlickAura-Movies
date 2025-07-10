@@ -591,18 +591,20 @@ const CreativeMovieSlider = () => {
         </div>
       </div>
 
-      {/* Navigation Controls */}
-      <div className="absolute top-1/2 left-4 sm:left-4 lg:left-8 transform -translate-y-1/2 z-20 mb-4">
-        <button
-          onClick={() => handleSlideChange("prev")}
-          className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 transform hover:scale-110 border border-white/20"
-          onMouseEnter={() => setIsAutoPlaying(false)}
-          onMouseLeave={() => setIsAutoPlaying(true)}
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
-        </button>
-      </div>
+      {/* Hide navigation buttons when video is playing */}
+      {!showVideoPopup && (
+        <div className="absolute top-1/2 left-4 sm:left-4 lg:left-8 transform -translate-y-1/2 z-20 mb-4">
+          <button
+            onClick={() => handleSlideChange("prev")}
+            className="group bg-black/20 hover:bg-black/40 backdrop-blur-md text-white p-2 sm:p-3 rounded-full transition-all duration-300 transform hover:scale-110 border border-white/20"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform duration-300" />
+          </button>
+        </div>
+      )}
 
       <div className="absolute top-1/2 right-4 sm:right-4 lg:right-8 transform -translate-y-1/2 z-20">
         <button
