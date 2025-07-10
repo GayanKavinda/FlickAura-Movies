@@ -30,49 +30,19 @@ const CreativeMovieSlider = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [likedMovies, setLikedMovies] = useState(new Set());
   const [isMobile, setIsMobile] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const transitionRef = useRef(null);
-  const autoPlayRef = useRef(null);
-  const sidebarObserver = useRef();
-  const sidebarRefs = useRef([]);
-  const sidebarContainerRef = useRef(null);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [videoKey, setVideoKey] = useState(null);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-  
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.touches[0].clientX;
-  };
-  
-  const handleTouchEnd = () => {
-    if (!isMobile || isTransitioning || movies.length === 0) return;
-  
-    const distance = touchStartX.current - touchEndX.current;
-    const swipeThreshold = 50; // Minimum distance to be considered swipe
-  
-    if (Math.abs(distance) > swipeThreshold) {
-      if (distance > 0) {
-        // Swiped left
-        handleSlideChange("next");
-      } else {
-        // Swiped right
-        handleSlideChange("prev");
-      }
-    }
-  };
+  const transitionRef = useRef(null);
+  const autoPlayRef = useRef(null);
+  const sidebarRefs = useRef([]);
+  const sidebarContainerRef = useRef(null);
   
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
       try {
         const res = await fetch(
-          `${TMDB_BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=${page}`
+          `${TMDB_BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US`
         );
         const data = await res.json();
 
@@ -110,7 +80,6 @@ const CreativeMovieSlider = () => {
         );
 
         setMovies(movieDetails);
-        setHasMore(data.page < data.total_pages);
       } catch (err) {
         console.error("Fetch error:", err);
         setMovies([]);
@@ -120,7 +89,7 @@ const CreativeMovieSlider = () => {
     };
 
     fetchMovies();
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -416,7 +385,7 @@ const CreativeMovieSlider = () => {
 
               {/* Overview */}
               <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
-                <p className="text-md sm:text-md text-white/80 leading-relaxed max-w-2xl">
+                <p className="text-sm sm:text-md text-white/80 leading-relaxed max-w-2xl">
                   {currentMovie.overview}
                 </p>
               </div>
