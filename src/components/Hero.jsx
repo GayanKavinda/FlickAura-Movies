@@ -416,7 +416,7 @@ const CreativeMovieSlider = () => {
 
               {/* Overview */}
               <div className="bg-gray-800/50 bg-opacity-75 rounded-lg p-4 text-white">
-                <p className="text-md sm:text-lg text-white/80 leading-relaxed max-w-2xl">
+                <p className="text-md sm:text-md text-white/80 leading-relaxed max-w-2xl">
                   {currentMovie.overview}
                 </p>
               </div>
