@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, User, Heart, Menu, X, Film, Tv, Users, Star, TrendingUp, Calendar, Play } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, User, Heart, Menu, X, Film, Tv, Users, Star, TrendingUp, Calendar, Play, ChevronDown, Zap } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -19,336 +28,291 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== '') {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      // Replace with: navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      console.log('Search query:', searchQuery.trim());
       setSearchQuery('');
-      if (isMenuOpen) setIsMenuOpen(false); // Optional: close mobile menu after search
+      if (isMenuOpen) setIsMenuOpen(false);
     }
   };
 
+  const handleNavClick = (path) => {
+    // Replace with: navigate(path) or use Link component
+    console.log('Navigate to:', path);
+  };
+
+  const navItems = [
+    { name: 'Home', path: '/', icon: null },
+    {
+      name: 'Movies',
+      icon: Film,
+      dropdown: 'movies',
+      items: [
+        { name: 'Popular Movies', path: '/movies/popular', icon: TrendingUp },
+        { name: 'Now Playing', path: '/movies/now-playing', icon: Play },
+        { name: 'Upcoming', path: '/movies/upcoming', icon: Calendar },
+        { name: 'Top Rated', path: '/movies/top-rated', icon: Star },
+      ]
+    },
+    {
+      name: 'TV Shows',
+      icon: Tv,
+      dropdown: 'tv',
+      items: [
+        { name: 'Popular Shows', path: '/tv/popular', icon: TrendingUp },
+        { name: 'On Air', path: '/tv/now-playing', icon: Play },
+        { name: 'Top Rated', path: '/tv/top-rated', icon: Star },
+      ]
+    },
+    { name: 'People', path: '/people', icon: Users },
+  ];
+
   return (
-    <nav className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 backdrop-blur-lg border-b border-purple-500/20 sticky top-0 z-50 bg-opacity-80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 group cursor-pointer">
-              <div className="bg-gradient-to-r from-pink-500 to-purple-600 p-2 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Film className="h-6 w-6 text-white" />
+    <div className="bg-gradient-to-br from-gray-900 via-black to-gray-800">
+
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled 
+          ? 'bg-black/80 backdrop-blur-xl border-b border-cyan-500/20 shadow-2xl shadow-cyan-500/10' 
+          : 'bg-transparent'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            {/* Logo */}
+            <div 
+              onClick={() => handleNavClick('/')}
+              className="flex items-center space-x-3 group cursor-pointer"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative bg-gradient-to-r from-cyan-500 to-purple-600 p-3 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                  <Zap className="h-6 w-6 text-white" />
+                </div>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                FlickAura
-              </span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer">
-              Home
-            </Link>
-
-            {/* Movies Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDropdown('movies')}
-                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
-              >
-                <Film className="h-4 w-4" />
-                <span>Movies</span>
-                <svg
-                  className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'movies' ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {activeDropdown === 'movies' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden transform transition-transform duration-300 hover:scale-105">
-                  <div className="p-2">
-                    <Link
-                      to="/movies/popular"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                    >
-                      <TrendingUp className="h-4 w-4 text-pink-400" />
-                      <span>Popular Movies</span>
-                    </Link>
-                    <Link
-                      to="/movies/now-playing"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                    >
-                      <Play className="h-4 w-4 text-pink-400" />
-                      <span>Now Playing</span>
-                    </Link>
-                    <Link
-                      to="/movies/upcoming"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                    >
-                      <Calendar className="h-4 w-4 text-pink-400" />
-                      <span>Upcoming</span>
-                    </Link>
-                    <Link
-                      to="/movies/top-rated"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                    >
-                      <Star className="h-4 w-4 text-pink-400" />
-                      <span>Top Rated</span>
-                    </Link>
-                  </div>
-                </div>
-              )}
+              <div className="hidden sm:block">
+                <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  FlickAura
+                </span>
+                <div className="text-xs text-gray-400 -mt-1">CINEMA HUB</div>
+              </div>
             </div>
 
-            {/* TV Shows Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => toggleDropdown('tv')}
-                className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
-              >
-                <Tv className="h-4 w-4" />
-                <span>TV Shows</span>
-                <svg
-                  className={`h-4 w-4 transition-transform duration-200 ${activeDropdown === 'tv' ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {activeDropdown === 'tv' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-purple-500/30 overflow-hidden transform transition-transform duration-300 hover:scale-105">
-                  <div className="p-2">
-                    <Link
-                      to="/tv/popular"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navItems.map((item) => (
+                <div key={item.name} className="relative">
+                  {item.dropdown ? (
+                    <button
+                      onClick={() => toggleDropdown(item.dropdown)}
+                      className="flex items-center space-x-2 px-4 py-2 text-white hover:text-cyan-400 transition-colors duration-200 font-medium rounded-xl hover:bg-white/10 group"
                     >
-                      <TrendingUp className="h-4 w-4 text-pink-400" />
-                      <span>Popular Shows</span>
-                    </Link>
-                    <Link
-                      to="/tv/now-playing"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
+                      <item.icon className="h-4 w-4" />
+                      <span>{item.name}</span>
+                      <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
+                        activeDropdown === item.dropdown ? 'rotate-180' : ''
+                      }`} />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleNavClick(item.path)}
+                      className="flex items-center space-x-2 px-4 py-2 text-white hover:text-cyan-400 transition-colors duration-200 font-medium rounded-xl hover:bg-white/10"
                     >
-                      <Play className="h-4 w-4 text-pink-400" />
-                      <span>On Air</span>
-                    </Link>
-                    <Link
-                      to="/tv/top-rated"
-                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                    >
-                      <Star className="h-4 w-4 text-pink-400" />
-                      <span>Top Rated</span>
-                    </Link>
-                  </div>
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      <span>{item.name}</span>
+                    </button>
+                  )}
+                  
+                  {/* Dropdown Menu */}
+                  {item.dropdown && activeDropdown === item.dropdown && (
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-black/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-cyan-500/20 overflow-hidden">
+                      <div className="p-2">
+                        {item.items.map((subItem) => (
+                          <button
+                            key={subItem.name}
+                            onClick={() => handleNavClick(subItem.path)}
+                            className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 group w-full text-left"
+                          >
+                            <subItem.icon className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300" />
+                            <span>{subItem.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
 
-            <Link
-              to="/people"
-              className="flex items-center space-x-1 text-white hover:text-pink-400 transition-colors duration-200 font-medium cursor-pointer"
-            >
-              <Users className="h-4 w-4" />
-              <span>People</span>
-            </Link>
+            {/* Search Bar */}
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="relative">
+                <div className={`relative transition-all duration-300 ${
+                  isSearchFocused ? 'scale-105' : ''
+                }`}>
+                  <input
+                    type="text"
+                    placeholder="Search movies, shows..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSearchSubmit(e);
+                      }
+                    }}
+                    className="w-64 bg-white/10 backdrop-blur-xl border border-cyan-500/30 rounded-full px-6 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all duration-300"
+                  />
+                  <button
+                    onClick={handleSearchSubmit}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full hover:from-cyan-400 hover:to-purple-500 transition-all duration-300 group"
+                  >
+                    <Search className="h-4 w-4 text-white group-hover:scale-110 transition-transform duration-200" />
+                  </button>
+                </div>
+              </div>
 
-            {/* Search Input Form */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center space-x-2">
-              <input
-                type="text"
-                placeholder="Search movies..."
-                className="rounded-md px-2 py-1 text-white focus:outline-none"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+              {/* Action Buttons */}
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => handleNavClick('/watchlist')}
+                  className="p-3 text-white hover:text-pink-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+                >
+                  <Heart className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                </button>
+                <button
+                  onClick={() => handleNavClick('/login')}
+                  className="p-3 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+                >
+                  <User className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex items-center space-x-2 lg:hidden">
               <button
-                type="submit"
-                className="p-2 bg-pink-500 hover:bg-pink-600 rounded-md transition-colors cursor-pointer"
-                aria-label="Search"
+                onClick={() => handleNavClick('/search')}
+                className="p-2 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200 md:hidden"
               >
-                <Search className="h-5 w-5 text-white" />
+                <Search className="h-5 w-5" />
               </button>
-            </form>
-          </div>
-
-          {/* Right Side Icons for Mobile */}
-          <div className="flex items-center space-x-4 md:hidden">
-            {/* Keep Search icon for mobile (optional: add input here too) */}
-            <Link
-              to="/search"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
-              aria-label="Search page"
-            >
-              <Search className="h-5 w-5" />
-            </Link>
-
-            <Link
-              to="/watchlist"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
-            >
-              <Heart className="h-5 w-5" />
-            </Link>
-
-            <Link
-              to="/login"
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
-            >
-              <User className="h-5 w-5" />
-            </Link>
-
-            <button
-              onClick={toggleMenu}
-              className="p-2 text-white hover:text-pink-400 hover:bg-purple-600/30 rounded-xl transition-all duration-200 cursor-pointer"
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+              <button
+                onClick={toggleMenu}
+                className="p-2 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200"
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-gray-900/95 backdrop-blur-xl border-t border-purple-500/30">
-          <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link
-              to="/"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              Home
-            </Link>
-
-            {/* Mobile Movies Section */}
-            <div className="space-y-1">
-              <button
-                onClick={() => toggleDropdown('mobile-movies')}
-                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-              >
-                <span className="flex items-center space-x-2">
-                  <Film className="h-4 w-4" />
-                  <span>Movies</span>
-                </span>
-                <svg
-                  className={`h-4 w-4 transition-transform duration-200 ${
-                    activeDropdown === 'mobile-movies' ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {activeDropdown === 'mobile-movies' && (
-                <div className="ml-4 space-y-1">
-                  <Link
-                    to="/movies/popular"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="lg:hidden bg-black/95 backdrop-blur-2xl border-t border-cyan-500/20">
+            <div className="px-4 pt-4 pb-6 space-y-2">
+              {/* Mobile Search */}
+              <div className="mb-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search movies, shows..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSearchSubmit(e);
+                      }
+                    }}
+                    className="w-full bg-white/10 backdrop-blur-xl border border-cyan-500/30 rounded-full px-6 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 focus:bg-white/20 transition-all duration-300"
+                  />
+                  <button
+                    onClick={handleSearchSubmit}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full hover:from-cyan-400 hover:to-purple-500 transition-all duration-300"
                   >
-                    Popular Movies
-                  </Link>
-                  <Link
-                    to="/movies/now-playing"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    Now Playing
-                  </Link>
-                  <Link
-                    to="/movies/upcoming"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    Upcoming
-                  </Link>
-                  <Link
-                    to="/movies/top-rated"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    Top Rated
-                  </Link>
+                    <Search className="h-4 w-4 text-white" />
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* Mobile TV Shows Section */}
-            <div className="space-y-1">
-              <button
-                onClick={() => toggleDropdown('mobile-tv')}
-                className="flex items-center justify-between w-full px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-              >
-                <span className="flex items-center space-x-2">
-                  <Tv className="h-4 w-4" />
-                  <span>TV Shows</span>
-                </span>
-                <svg
-                  className={`h-4 w-4 transition-transform duration-200 ${
-                    activeDropdown === 'mobile-tv' ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {activeDropdown === 'mobile-tv' && (
-                <div className="ml-4 space-y-1">
-                  <Link
-                    to="/tv/popular"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    Popular Shows
-                  </Link>
-                  <Link
-                    to="/tv/now-playing"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    On Air
-                  </Link>
-                  <Link
-                    to="/tv/top-rated"
-                    className="block px-3 py-2 text-gray-300 hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-                  >
-                    Top Rated
-                  </Link>
+              {/* Mobile Navigation Items */}
+              {navItems.map((item) => (
+                <div key={item.name} className="space-y-1">
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => toggleDropdown(`mobile-${item.dropdown}`)}
+                        className="flex items-center justify-between w-full px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                      >
+                        <span className="flex items-center space-x-3">
+                          <item.icon className="h-5 w-5" />
+                          <span>{item.name}</span>
+                        </span>
+                        <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
+                          activeDropdown === `mobile-${item.dropdown}` ? 'rotate-180' : ''
+                        }`} />
+                      </button>
+                      {activeDropdown === `mobile-${item.dropdown}` && (
+                        <div className="ml-6 space-y-1">
+                          {item.items.map((subItem) => (
+                            <button
+                              key={subItem.name}
+                              onClick={() => handleNavClick(subItem.path)}
+                              className="flex items-center space-x-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
+                            >
+                              <subItem.icon className="h-4 w-4 text-cyan-400" />
+                              <span>{subItem.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => handleNavClick(item.path)}
+                      className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
+                    >
+                      {item.icon && <item.icon className="h-5 w-5" />}
+                      <span>{item.name}</span>
+                    </button>
+                  )}
                 </div>
-              )}
+              ))}
+
+              {/* Mobile Action Items */}
+              <div className="border-t border-cyan-500/20 pt-4 space-y-2">
+                <button
+                  onClick={() => handleNavClick('/watchlist')}
+                  className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
+                >
+                  <Heart className="h-5 w-5" />
+                  <span>My Watchlist</span>
+                </button>
+                <button
+                  onClick={() => handleNavClick('/login')}
+                  className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
+                >
+                  <User className="h-5 w-5" />
+                  <span>Login</span>
+                </button>
+                <button
+                  onClick={() => handleNavClick('/contact')}
+                  className="block px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
+                >
+                  Contact Us
+                </button>
+                <button
+                  onClick={() => handleNavClick('/about')}
+                  className="block px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
+                >
+                  About
+                </button>
+              </div>
             </div>
-
-            <Link
-              to="/people"
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              <Users className="h-4 w-4" />
-              <span>People</span>
-            </Link>
-
-            <Link
-              to="/watchlist"
-              className="flex items-center space-x-2 px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              <Heart className="h-4 w-4" />
-              <span>My Watchlist</span>
-            </Link>
-
-            <Link
-              to="/contact"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              Contact Us
-            </Link>
-
-            <Link
-              to="/about"
-              className="block px-3 py-2 text-white hover:bg-purple-600/30 rounded-xl transition-colors duration-200 cursor-pointer"
-            >
-              About
-            </Link>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </nav>
+
+      
+    </div>
   );
 };
 
