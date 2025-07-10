@@ -262,7 +262,7 @@ const CreativeMovieSlider = () => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-64px)] md:h-screen overflow-hidden bg-black pt-4 md:pt-0 pb-0">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       <div className="absolute inset-0">
         {movies.map((movie, index) => (
           <div
@@ -297,7 +297,7 @@ const CreativeMovieSlider = () => {
 
       {/* Main Content */}
       <div
-        className="relative z-10 flex items-center justify-center min-h-[calc(100vh-64px)] md:min-h-screen px-4 sm:px-6 py-2"
+        className="relative z-10 flex items-center justify-center min-h-screen px-4 sm:px-6 py-2 pt-20 md:pt-0"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -673,26 +673,207 @@ const CreativeMovieSlider = () => {
             }`}
             aria-label={`Go to slide ${index + 1}`}
           >
-            {index === currentSlide && (
-              <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
+            {index === currentSlide && isAutoPlaying && (
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-red-500 rounded-full origin-left animate-progress"></div>
             )}
           </button>
         ))}
       </div>
 
-      {/* Auto-play indicator - Desktop only */}
-      {!isMobile && (
-        <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center space-x-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
-          <div
-            className={`w-2 h-2 rounded-full ${
-              isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
-            }`}
-          ></div>
-          <span className="text-white text-xs sm:text-sm font-medium">
-            {isAutoPlaying ? "Auto" : "Manual"}
-          </span>
+      {/* Details Modal */}
+      {showDetails && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/10">
+            <div className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-white">
+                  {currentMovie.title}
+                </h2>
+                <button
+                  onClick={() => setShowDetails(false)}
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300"
+                  aria-label="Close details"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                    <span className="text-white font-semibold">
+                      {currentMovie.rating}/10
+                    </span>
+                    <span className="text-white/60">
+                      ({currentMovie.voteCount} votes)
+                    </span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="w-5 h-5 text-purple-400" />
+                    <span className="text-white">{currentMovie.year}</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-5 h-5 text-blue-400" />
+                    <span className="text-white">{currentMovie.duration}</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">Genre:</span>
+                    <p className="text-white/60">{currentMovie.genre}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">
+                      Popularity:
+                    </span>
+                    <p className="text-white/60">
+                      {Math.round(currentMovie.popularity)}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">Language:</span>
+                    <p className="text-white/60">
+                      {currentMovie.language?.toUpperCase()}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">Status:</span>
+                    <p className="text-white/60">{currentMovie.status}</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">Budget:</span>
+                    <p className="text-white/60">
+                      ${Math.round(currentMovie.budget / 1_000_000)}M
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-white/80 font-medium">Revenue:</span>
+                    <p className="text-white/60">
+                      ${Math.round(currentMovie.revenue / 1_000_000)}M
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-white/80 font-medium">Overview:</span>
+                <p className="text-white/60 leading-relaxed">
+                  {currentMovie.overview}
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setShowDetails(false)}
+                  className="bg-gradient-to-r from-purple-500 to-red-500 hover:from-purple-600 hover:to-red-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
+                >
+                  Close Details
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
+
+      {/* Desktop Controls */}
+      {!isMobile && (
+        <div className="absolute top-4 right-4 flex items-center space-x-3 z-20">
+          <div
+            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full cursor-pointer transition-all duration-300 ${
+              isAutoPlaying
+                ? "bg-green-500/20 text-green-300"
+                : "bg-gray-500/20 text-gray-300"
+            }`}
+            style={{ userSelect: "none" }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setIsAutoPlaying(!isAutoPlaying);
+              }
+            }}
+            aria-label={isAutoPlaying ? "Switch to Manual" : "Switch to Auto Play"}
+          >
+            <div
+              className={`w-2 h-2 rounded-full ${
+                isAutoPlaying ? "bg-green-400 animate-pulse" : "bg-gray-400"
+              }`}
+            />
+            <span className="text-sm font-semibold">
+              {isAutoPlaying ? "Auto Play" : "Manual"}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes progress {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+        
+        .animate-progress {
+          animation: progress ${isMobile ? "8s" : "6s"} linear;
+        }
+        
+        .scrollbar-hide {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .fade-in {
+          animation: fadeIn 0.8s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        
+        .modal-enter {
+          animation: modalEnter 0.3s ease-out forwards;
+        }
+        
+        @keyframes modalEnter {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </div>
   );
 };
