@@ -67,13 +67,15 @@ const ModernMovieWelcome = () => {
 
   useEffect(() => {
     const checkMobile = () => {
-      const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/i.test(
+        navigator.userAgent
+      );
       setIsMobile(isMobileDevice);
     };
-  
+
     checkMobile();
   }, []);
-  
+
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Spline 3D Background */}
@@ -102,7 +104,7 @@ const ModernMovieWelcome = () => {
           ) : (
             <img
               src="/static/3d-scene-placeholder.webp"
-              alt="3D Preview" 
+              alt="3D Preview"
               loading="lazy"
               className="w-full h-full object-cover"
             />
@@ -145,19 +147,19 @@ const ModernMovieWelcome = () => {
           }`}
           style={{ pointerEvents: "auto" }}
         >
-          <div className="relative overflow-hidden h-32 mb-6">
-            <div
+<div className="relative overflow-hidden min-h-[140px] sm:min-h-[180px] mb-6">
+<div
               className="absolute inset-0 transition-transform duration-1000 ease-in-out"
               style={{ transform: `translateY(-${currentSlide * 100}%)` }}
             >
               {heroMovies.map((movie, index) => (
                 <div key={index} className="h-32 flex flex-col justify-center">
                   <h2
-                    className={`text-7xl md:text-8xl font-black mb-2 bg-gradient-to-r ${movie.color} bg-clip-text text-transparent ${movie.shadow} hover:scale-105 transition-transform duration-300 drop-shadow-2xl`}
+                    className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-2 bg-gradient-to-r ${movie.color} bg-clip-text text-transparent ${movie.shadow} hover:scale-105 transition-transform duration-300 drop-shadow-2xl`}
                   >
                     {movie.title}
                   </h2>
-                  <h3 className="text-2xl md:text-3xl font-light text-gray-200 tracking-widest drop-shadow-lg">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-light text-gray-200 tracking-widest drop-shadow-lg">
                     {movie.subtitle}
                   </h3>
                 </div>
@@ -237,16 +239,16 @@ const ModernMovieWelcome = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes grid-move {
-          0% {
-            transform: translate(0, 0);
-          }
-          100% {
-            transform: translate(50px, 50px);
-          }
-        }
-      `}</style>
+      <style>{`
+  @keyframes grid-move {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(50px, 50px);
+    }
+  }
+`}</style>
     </div>
   );
 };
