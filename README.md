@@ -25,18 +25,30 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 
 ```bash
 ├── public/
+│   ├── FlickAura-transperent.png
+│   ├── FlickAura.jpg
+│   ├── FlickAura.webp
+│   ├── static/
+│   │   ├── 3d-scene-placeholder.png
+│   │   └── 3d-scene-placeholder.webp
+│   └── vite.svg
 ├── src/
 │   ├── api/
 │   │   └── tmdb.js
 │   ├── assets/
+│   │   ├── react.svg
+│   │   └── screenshot-preview.png
 │   ├── components/
+│   │   ├── Hero.jsx
 │   │   ├── MovieCard.jsx
 │   │   ├── MovieDetail.jsx
-│   │   └── Navbar.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── Hero Modified.txt
+│   │   ├── modern navbar.txt
+│   │   └── modern new navbar.txt
 │   ├── pages/
 │   │   ├── About.jsx
 │   │   ├── Contact.jsx
-│   │   ├── FilteredByGenre.jsx
 │   │   ├── Genre.jsx
 │   │   ├── Login.jsx
 │   │   ├── NowPlaying.jsx
@@ -49,7 +61,7 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 │   │   ├── Watchlist.jsx
 │   │   └── Welcome.jsx
 │   ├── App.jsx
-│   ├── index.jsx
+│   ├── index.css
 │   └── main.jsx
 ├── .gitignore
 ├── eslint.config.js
@@ -173,4 +185,4 @@ If you enjoyed this project:
 
 ---
 
-> _“Code is art. Make it clean, make it meaningful.”_
+> _"Code is art. Make it clean, make it meaningful."_
