@@ -302,7 +302,7 @@ const MovieDetail = () => {
         </div>
 
         {/* Movie Info Overlay - Now positioned higher */}
-<div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 pt-24 md:pt-16 pb-12"> {/* Reduced top padding */}
+<div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 pt-24 md:pt-16 pb-6 md:pb-12"> {/* Reduced top padding */}
   <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:items-start">
     {/* Poster - Moved up with everything else */}
     <div className="flex-shrink-0 order-1 lg:order-1 lg:mt-[0.5rem]"> {/* Adjusted margin */}
