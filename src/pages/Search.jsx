@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import {
   Search,
   Filter,
@@ -214,9 +214,11 @@ const ModernSearch = () => {
   const GridView = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       {results.map((movie) => (
-        <div
+        <Link
           key={movie.id}
+          to={`/movies/${movie.id}`} // Changed from /movie/ to /movies/
           className="group relative bg-gradient-to-br from-black/70 to-gray-900/70 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30"
+          aria-label={`View details for ${movie.title || "movie"}`}
         >
           <div className="relative overflow-hidden">
             <img
@@ -264,16 +266,28 @@ const ModernSearch = () => {
               ))}
             </div>
             <div className="flex items-center justify-between">
-              <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <button
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add your button logic here, e.g., open a modal to watch trailer
+                }}
+              >
                 <Eye className="w-4 h-4" />
                 <span className="text-sm">Watch</span>
               </button>
-              <button className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition-colors">
+              <button
+                className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Add your button logic here, e.g., toggle favorite
+                }}
+              >
                 <Heart className="w-4 h-4" />
               </button>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
@@ -281,91 +295,95 @@ const ModernSearch = () => {
   const ListView = () => (
     <div className="space-y-4">
       {results.map((movie) => (
-        <div
+        <Link
           key={movie.id}
-          className="bg-gradient-to-r from-black/70 to-gray-900/70 backdrop-blur-md rounded-2xl border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 overflow-hidden"
+          to={`/movies/${movie.id}`}
+          className="flex flex-col sm:flex-row bg-gradient-to-r from-black/70 to-gray-900/70 backdrop-blur-md rounded-2xl border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 overflow-hidden"
+          aria-label={`View details for ${movie.title || "movie"}`}
         >
-          <div className="flex flex-col sm:flex-row">
-            {" "}
-            {/* Added flex-col for mobile stacking */}
-            <div className="w-full sm:w-32 h-48 flex-shrink-0 relative overflow-hidden">
-              <img
-                src={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "https://placehold.co/500x750?text=No+Image"
-                }
-                alt={movie.title || "Movie poster"}
-                className="w-full h-full object-cover"
-              />
+          <div className="w-full sm:w-32 h-48 flex-shrink-0 relative overflow-hidden">
+            <img
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                  : "https://placehold.co/500x750?text=No+Image"
+              }
+              alt={movie.title || "Movie poster"}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 p-4 sm:p-6">
+            <div className="flex items-start justify-between mb-3">
+              <h3 className="text-white font-bold text-xl mb-2">
+                {movie.title || "Unknown Title"}
+              </h3>
+              <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span className="text-white font-medium">
+                  {(movie.vote_average || 0).toFixed(1)}
+                </span>
+              </div>
             </div>
-            <div className="flex-1 p-4 sm:p-6">
-              {" "}
-              {/* Adjusted padding for mobile */}
-              <div className="flex items-start justify-between mb-3">
-                <h3 className="text-white font-bold text-xl mb-2">
-                  {movie.title || "Unknown Title"}
-                </h3>
-                <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="text-white font-medium">
-                    {(movie.vote_average || 0).toFixed(1)}
-                  </span>
-                </div>
+            <p className="text-gray-300 mb-4 line-clamp-3">
+              {movie.overview || "No description available"}
+            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                <span>
+                  {movie.release_date
+                    ? new Date(movie.release_date).getFullYear()
+                    : "N/A"}
+                </span>
               </div>
-              <p className="text-gray-300 mb-4 line-clamp-3">
-                {movie.overview || "No description available"}
-              </p>
-              <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  <span>
-                    {movie.release_date
-                      ? new Date(movie.release_date).getFullYear()
-                      : "N/A"}
+            </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+              <div className="flex flex-wrap gap-2 mb-3 sm:mb-0">
+                {(movie.genre_ids || []).slice(0, 3).map((genreId) => (
+                  <span
+                    key={genreId}
+                    className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-sm"
+                  >
+                    {getGenreName(genreId)}
                   </span>
-                </div>
+                ))}
               </div>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-                {" "}
-                {/* Adjusted for mobile stacking */}
-                <div className="flex flex-wrap gap-2 mb-3 sm:mb-0">
-                  {" "}
-                  {/* Added margin-bottom for mobile */}
-                  {(movie.genre_ids || []).slice(0, 3).map((genreId) => (
-                    <span
-                      key={genreId}
-                      className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-sm"
-                    >
-                      {getGenreName(genreId)}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                    <Eye className="w-4 h-4" />
-                    <span>Watch</span>
-                  </button>
-                  <button className="p-2 text-gray-400 hover:text-red-400 transition-colors">
-                    <Heart className="w-5 h-5" />
-                  </button>
-                </div>
+              <div className="flex items-center gap-3">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Add your button logic here, e.g., open a modal to watch trailer
+                  }}
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>Watch</span>
+                </button>
+                <button
+                  className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Add your button logic here, e.g., toggle favorite
+                  }}
+                >
+                  <Heart className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
 
   const CompactView = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {" "}
-      {/* Changed md to sm for better breakpoint */}
       {results.map((movie) => (
-        <div
+        <Link
           key={movie.id}
+          to={`/movies/${movie.id}`} // Changed from /movie/ to /movies/
           className="bg-gradient-to-r from-black/70 to-gray-900/70 backdrop-blur-md rounded-xl border border-gray-700/50 hover:border-purple-500/70 transition-all duration-300 p-4"
+          aria-label={`View details for ${movie.title || "movie"}`}
         >
           <div className="flex gap-4">
             <div className="w-20 h-28 flex-shrink-0 relative overflow-hidden rounded-lg">
@@ -400,8 +418,6 @@ const ModernSearch = () => {
               </p>
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap gap-1">
-                  {" "}
-                  {/* Smaller gap for compact view */}
                   {(movie.genre_ids || []).slice(0, 2).map((genreId) => (
                     <span
                       key={genreId}
@@ -412,17 +428,29 @@ const ModernSearch = () => {
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <button className="p-1 text-gray-400 hover:text-white transition-colors">
+                  <button
+                    className="p-1 text-gray-400 hover:text-white transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Add your button logic here, e.g., open a modal to watch trailer
+                    }}
+                  >
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button className="p-1 text-gray-400 hover:text-red-400 transition-colors">
+                  <button
+                    className="p-1 text-gray-400 hover:text-red-400 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Add your button logic here, e.g., toggle favorite
+                    }}
+                  >
                     <Heart className="w-4 h-4" />
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

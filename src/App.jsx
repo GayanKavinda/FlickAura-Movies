@@ -42,7 +42,7 @@ function App() {
           <NowPlaying />
           <Upcoming />
           <TopRated />
-          <TVShows />
+          {/* <TVShows /> */}
           <People />
           <Footer />
         </div>

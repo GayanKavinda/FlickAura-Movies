@@ -86,7 +86,7 @@ const MovieDetail = () => {
   useEffect(() => {
     if (!loading && movie) {
       // Clear any existing ScrollTriggers to prevent duplicates on ID change
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 
       // Hero section entrance animation
       gsap.fromTo(
@@ -290,104 +290,110 @@ const MovieDetail = () => {
 
         {/* Action Buttons */}
         <div className="absolute top-24 md:top-28 right-4 md:right-6 z-20 flex gap-2 md:gap-3">
-          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg cursor-pointer">
             <FaHeart />
           </button>
-          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg cursor-pointer">
             <FaBookmark />
           </button>
-          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg cursor-pointer">
             <FaShare />
           </button>
         </div>
 
         {/* Movie Info Overlay - Now positioned higher */}
-<div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 pt-32 md:pt-20 pb-12"> {/* Reduced top padding */}
-  <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:items-start">
-    {/* Poster - Moved up with everything else */}
-    <div className="flex-shrink-0 order-1 lg:order-1 ref={posterRef} flex justify-center"> {/* Adjusted margin */}
-      <img
-        src={posterUrl}
-        alt={movie.title}
-        className="w-40 h-60 sm:w-48 sm:h-72 md:w-56 md:h-84 lg:w-64 lg:h-96 object-cover rounded-xl md:rounded-2xl shadow-2xl border-2 md:border-4 border-gray-800"
-      />
-    </div>
+        <div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 pt-32 md:pt-20 pb-12">
+          {" "}
+          {/* Reduced top padding */}
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:items-start">
+            {/* Poster - Moved up with everything else */}
+            <div className="flex-shrink-0 order-1 lg:order-1 ref={posterRef} flex justify-center cursor-pointer">
+              {" "}
+              {/* Adjusted margin */}
+              <img
+                src={posterUrl}
+                alt={movie.title}
+                className="w-40 h-60 sm:w-48 sm:h-72 md:w-56 md:h-84 lg:w-64 lg:h-96 object-cover rounded-xl md:rounded-2xl shadow-2xl border-2 md:border-4 border-gray-800"
+              />
+            </div>
 
-    {/* Movie Details - Entire block moved up */}
-    <div className="flex-1 text-white text-center lg:text-left order-2 lg:order-2">
-      <div className="lg:-mt-[0.1rem]"> {/* Fine-tuned alignment */}
-        <h1
-          ref={titleRef}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 leading-tight"
-        >
-          {movie.title}
-        </h1>
-        {movie.tagline && (
-          <p
-            ref={taglineRef}
-            className="text-lg sm:text-xl md:text-2xl text-yellow-400 italic mb-3 md:mb-4 opacity-90"
-          >
-            {movie.tagline}
-          </p>
-        )}
-      </div>
+            {/* Movie Details - Entire block moved up */}
+            <div className="flex-1 text-white text-center lg:text-left order-2 lg:order-2">
+              <div className="lg:-mt-[0.1rem]">
+                {" "}
+                {/* Fine-tuned alignment */}
+                <h1
+                  ref={titleRef}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 leading-tight"
+                >
+                  {movie.title}
+                </h1>
+                {movie.tagline && (
+                  <p
+                    ref={taglineRef}
+                    className="text-lg sm:text-xl md:text-2xl text-yellow-400 italic mb-3 md:mb-4 opacity-90"
+                  >
+                    {movie.tagline}
+                  </p>
+                )}
+              </div>
 
-      {/* All content below moves up together */}
-      <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 md:gap-4 mb-4 md:mb-6">
-        <div className="flex items-center gap-1 md:gap-2 bg-yellow-400 text-black px-2 md:px-4 py-1 md:py-2 rounded-full font-bold text-xs md:text-lg">
-          <FaStar className="text-xs md:text-sm" />
-          <span>{movie.vote_average?.toFixed(1)}</span>
-          <span className="text-xs opacity-75 hidden sm:inline">
-            ({movie.vote_count?.toLocaleString()} votes)
-          </span>
+              {/* All content below moves up together */}
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 md:gap-4 mb-4 md:mb-6">
+                <div className="flex items-center gap-1 md:gap-2 bg-yellow-400 text-black px-2 md:px-4 py-1 md:py-2 rounded-full font-bold text-xs md:text-lg">
+                  <FaStar className="text-xs md:text-sm" />
+                  <span>{movie.vote_average?.toFixed(1)}</span>
+                  <span className="text-xs opacity-75 hidden sm:inline">
+                    ({movie.vote_count?.toLocaleString()} votes)
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
+                  <FaCalendarAlt className="text-xs md:text-sm" />
+                  <span>
+                    {movie.release_date
+                      ? new Date(movie.release_date).getFullYear()
+                      : "N/A"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
+                  <FaClock className="text-xs md:text-sm" />
+                  <span>{formatRuntime(movie.runtime)}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-4 md:mb-6">
+                {movie.genres?.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="bg-gray-700/80 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm text-gray-200"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+
+              <p
+                ref={overviewRef}
+                className="text-sm md:text-base lg:text-lg leading-relaxed max-w-4xl mb-4 md:mb-6 opacity-90 mx-auto lg:mx-0"
+              >
+                {movie.overview || "No overview available."}
+              </p>
+
+              {selectedVideo && (
+                <button
+                  ref={playButtonRef}
+                  onClick={() => {
+                    /* Logic to open modal or play video directly */
+                  }}
+                  className="bg-yellow-400 text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0 cursor-pointer"
+                >
+                  <FaPlay className="text-sm md:text-md" />
+                  Watch Trailer
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
-          <FaCalendarAlt className="text-xs md:text-sm" />
-          <span>
-            {movie.release_date
-              ? new Date(movie.release_date).getFullYear()
-              : "N/A"}
-          </span>
-        </div>
-        <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
-          <FaClock className="text-xs md:text-sm" />
-          <span>{formatRuntime(movie.runtime)}</span>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-4 md:mb-6">
-        {movie.genres?.map((genre) => (
-          <span
-            key={genre.id}
-            className="bg-gray-700/80 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm text-gray-200"
-          >
-            {genre.name}
-          </span>
-        ))}
-      </div>
-
-      <p
-        ref={overviewRef}
-        className="text-sm md:text-base lg:text-lg leading-relaxed max-w-4xl mb-4 md:mb-6 opacity-90 mx-auto lg:mx-0"
-      >
-        {movie.overview || "No overview available."}
-      </p>
-
-      {selectedVideo && (
-        <button
-          ref={playButtonRef}
-          onClick={() => {
-            /* Logic to open modal or play video directly */
-          }}
-          className="bg-yellow-400 text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0"
-        >
-          <FaPlay className="text-sm md:text-md" />
-          Watch Trailer
-        </button>
-      )}
-    </div>
-  </div>
-</div>
       </div>
 
       {/* Full-width Main Video Player Section */}
@@ -472,7 +478,9 @@ const MovieDetail = () => {
             <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <FaDollarSign className="text-yellow-400 text-lg md:text-xl" />
-                <h3 className="text-white font-semibold text-sm md:text-base">Budget</h3>
+                <h3 className="text-white font-semibold text-sm md:text-base">
+                  Budget
+                </h3>
               </div>
               <p className="text-lg md:text-2xl font-bold text-yellow-400">
                 {formatCurrency(movie.budget)}
@@ -481,7 +489,9 @@ const MovieDetail = () => {
             <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <FaDollarSign className="text-green-400 text-lg md:text-xl" />
-                <h3 className="text-white font-semibold text-sm md:text-base">Revenue</h3>
+                <h3 className="text-white font-semibold text-sm md:text-base">
+                  Revenue
+                </h3>
               </div>
               <p className="text-lg md:text-2xl font-bold text-green-400">
                 {formatCurrency(movie.revenue)}
@@ -490,7 +500,9 @@ const MovieDetail = () => {
             <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <FaGlobe className="text-blue-400 text-lg md:text-xl" />
-                <h3 className="text-white font-semibold text-sm md:text-base">Countries</h3>
+                <h3 className="text-white font-semibold text-sm md:text-base">
+                  Countries
+                </h3>
               </div>
               <p className="text-gray-300 text-sm md:text-lg">
                 {movie.production_countries
@@ -501,7 +513,9 @@ const MovieDetail = () => {
             <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
               <div className="flex items-center gap-2 md:gap-3 mb-2">
                 <FaGlobe className="text-purple-400 text-lg md:text-xl" />
-                <h3 className="text-white font-semibold text-sm md:text-base">Languages</h3>
+                <h3 className="text-white font-semibold text-sm md:text-base">
+                  Languages
+                </h3>
               </div>
               <p className="text-gray-300 text-sm md:text-lg">
                 {movie.spoken_languages
@@ -513,7 +527,9 @@ const MovieDetail = () => {
               <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
                 <div className="flex items-center gap-2 md:gap-3 mb-2">
                   <FaImdb className="text-orange-400 text-lg md:text-xl" />
-                  <h3 className="text-white font-semibold text-sm md:text-base">IMDb Link</h3>
+                  <h3 className="text-white font-semibold text-sm md:text-base">
+                    IMDb Link
+                  </h3>
                 </div>
                 <a
                   href={`https://www.imdb.com/title/${movie.imdb_id}`}
@@ -529,7 +545,9 @@ const MovieDetail = () => {
               <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
                 <div className="flex items-center gap-2 md:gap-3 mb-2">
                   <FaGlobe className="text-teal-400 text-lg md:text-xl" />
-                  <h3 className="text-white font-semibold text-sm md:text-base">Homepage</h3>
+                  <h3 className="text-white font-semibold text-sm md:text-base">
+                    Homepage
+                  </h3>
                 </div>
                 <a
                   href={movie.homepage}
@@ -576,7 +594,9 @@ const MovieDetail = () => {
                     <h4 className="text-white font-semibold text-xs md:text-sm mb-1 truncate">
                       {person.name}
                     </h4>
-                    <p className="text-gray-400 text-xs truncate">{person.character}</p>
+                    <p className="text-gray-400 text-xs truncate">
+                      {person.character}
+                    </p>
                   </div>
                 ))}
               </div>
