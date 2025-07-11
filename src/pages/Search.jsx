@@ -193,6 +193,7 @@ const ModernSearch = () => {
       includeAdult: false,
     });
     setCurrentPage(1);
+    setShowFilters(false);
   };
 
   const getGenreName = (genreId) => {
@@ -452,174 +453,183 @@ const ModernSearch = () => {
       <div className="relative z-10">
         {/* Header */}
         <div className="pt-16 bg-black/30 backdrop-blur-md border-b border-gray-700/50 sticky top-0 z-20">
-          <div className="max-w-7xl mx-auto px-4 py-6">
-            {/* Search Bar */}
-            <div className="mb-6">
-              <form onSubmit={handleSearchSubmit} className="w-full sm:max-w-2xl sm:mx-auto"> {/* Changed max-w-2xl mx-auto to be conditional */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="search"
-                    placeholder="Search for movies..."
-                    defaultValue={searchQuery}
-                    className="w-full pl-12 pr-4 py-3 bg-black/50 backdrop-blur-md border border-gray-600/50 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  />
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl transition-colors"
-                  >
-                    Search
-                  </button>
+          <div className="pt-10 bg-black/30 backdrop-blur-md border-b border-gray-700/50 sticky top-0 z-20">
+            <div className="max-w-7xl mx-auto px-4 py-6">
+              {/* Combined Header Row: Search Results (Left), Search Bar (Center), View/Filter Buttons (Right) */}
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                {/* Search Results Text (Left Side) */}
+                <div className="flex-shrink-0 w-full md:w-auto text-center md:text-left">
+                  <h1 className="text-3xl font-bold text-white mb-1 drop-shadow-lg">
+                    Search Results
+                  </h1>
+                  <p className="text-gray-300 drop-shadow-md">
+                    {searchQuery
+                      ? `Found ${totalResults} movies for "${searchQuery}"`
+                      : 'Found 129 movies for "avengers"'}
+                  </p>
                 </div>
-              </form>
-            </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 sm:gap-0"> {/* Added flex-col and gap for mobile */}
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg text-center sm:text-left"> {/* Centered on mobile */}
-                  Search Results
-                </h1>
-                <p className="text-gray-300 drop-shadow-md text-center sm:text-left"> {/* Centered on mobile */}
-                  {searchQuery
-                    ? `Found ${totalResults} movies for "${searchQuery}"`
-                    : "Enter a search term to find movies"}
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"> {/* Adjusted for mobile stacking */}
-                <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-lg p-1 border border-gray-700/50 w-full justify-center sm:w-auto"> {/* Added w-full and justify-center */}
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded-md transition-all ${
-                      viewMode === "grid"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-300 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <Grid className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-2 rounded-md transition-all ${
-                      viewMode === "list"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-300 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <List className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("compact")}
-                    className={`p-2 rounded-md transition-all ${
-                      viewMode === "compact"
-                        ? "bg-purple-600 text-white"
-                        : "text-gray-300 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <SlidersHorizontal className="w-5 h-5" />
-                  </button>
-                </div>
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm cursor-pointer w-full sm:w-auto" // Added w-full and justify-center
+                {/* Search Bar (Center) - Takes available space */}
+                <form
+                  onSubmit={handleSearchSubmit}
+                  className="w-full md:flex-grow md:max-w-md lg:max-w-xl"
                 >
-                  <Filter className="w-5 h-5" />
-                  <span>Filters</span>
-                </button>
-              </div>
-            </div>
+                  <div className="relative flex items-center">
+                    <Search className="absolute left-4 text-gray-400 w-5 h-5" />
+                    <input
+                      type="text"
+                      name="search"
+                      placeholder="doctor strange"
+                      defaultValue={searchQuery}
+                      className="w-full pl-12 pr-4 py-3 bg-black/50 backdrop-blur-md border border-gray-600/50 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                    <button
+                      type="submit"
+                      className="ml-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl transition-colors"
+                    >
+                      Search
+                    </button>
+                  </div>
+                </form>
 
-            {/* Filters */}
-            {showFilters && (
-              <div className="bg-black/50 backdrop-blur-md rounded-xl border border-gray-700/50 p-4 sm:p-6 mb-6"> {/* Adjusted padding */}
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-semibold text-lg">Filters</h3>
+                {/* View Mode Buttons and Filters Button (Right Side) */}
+                <div className="flex flex-shrink-0 w-full md:w-auto justify-center md:justify-end items-center gap-4">
+                  <div className="flex items-center gap-2 bg-black/50 backdrop-blur-md rounded-lg p-1 border border-gray-700/50">
+                    <button
+                      onClick={() => setViewMode("grid")}
+                      className={`p-2 rounded-md transition-all ${
+                        viewMode === "grid"
+                          ? "bg-purple-600 text-white"
+                          : "text-gray-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <Grid className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode("list")}
+                      className={`p-2 rounded-md transition-all ${
+                        viewMode === "list"
+                          ? "bg-purple-600 text-white"
+                          : "text-gray-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <List className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode("compact")}
+                      className={`p-2 rounded-md transition-all ${
+                        viewMode === "compact"
+                          ? "bg-purple-600 text-white"
+                          : "text-gray-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      <SlidersHorizontal className="w-5 h-5" />
+                    </button>
+                  </div>
                   <button
-                    onClick={clearFilters}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600/90 hover:bg-purple-700 text-white rounded-lg transition-colors backdrop-blur-sm cursor-pointer"
                   >
-                    <X className="w-5 h-5" />
+                    <Filter className="w-5 h-5" />
+                    <span>Filters</span>
                   </button>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"> {/* Changed md to sm for smaller screens */}
-                  <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Year
-                    </label>
-                    <select
-                      value={filters.year}
-                      onChange={(e) =>
-                        handleFilterChange("year", e.target.value)
-                      }
-                      className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+              </div>
+
+              {/* Filters (Conditional Visibility) */}
+              {showFilters && (
+                <div className="bg-black/50 backdrop-blur-md rounded-xl border border-gray-700/50 p-4 sm:p-6 mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-white font-semibold text-lg">
+                      Filters
+                    </h3>
+                    <button
+                      onClick={clearFilters}
+                      className="text-gray-400 hover:text-white transition-colors"
                     >
-                      <option value="">All Years</option>
-                      {Array.from(
-                        { length: 30 },
-                        (_, i) => new Date().getFullYear() - i
-                      ).map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                      <X className="w-5 h-5" />
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Genre
-                    </label>
-                    <select
-                      value={filters.genre}
-                      onChange={(e) =>
-                        handleFilterChange("genre", e.target.value)
-                      }
-                      className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
-                    >
-                      <option value="">All Genres</option>
-                      {genres.map((genre) => (
-                        <option key={genre.id} value={genre.id}>
-                          {genre.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Rating
-                    </label>
-                    <select
-                      value={filters.rating}
-                      onChange={(e) =>
-                        handleFilterChange("rating", e.target.value)
-                      }
-                      className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
-                    >
-                      <option value="">All Ratings</option>
-                      <option value="9">9.0+ Stars</option>
-                      <option value="8">8.0+ Stars</option>
-                      <option value="7">7.0+ Stars</option>
-                      <option value="6">6.0+ Stars</option>
-                      <option value="5">5.0+ Stars</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 text-sm mb-2">
-                      Sort By
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
-                    >
-                      <option value="popularity">Popularity</option>
-                      <option value="rating">Rating</option>
-                      <option value="release_date">Release Date</option>
-                      <option value="title">Title</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">
+                        Year
+                      </label>
+                      <select
+                        value={filters.year}
+                        onChange={(e) =>
+                          handleFilterChange("year", e.target.value)
+                        }
+                        className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+                      >
+                        <option value="">All Years</option>
+                        {Array.from(
+                          { length: 30 },
+                          (_, i) => new Date().getFullYear() - i
+                        ).map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">
+                        Genre
+                      </label>
+                      <select
+                        value={filters.genre}
+                        onChange={(e) =>
+                          handleFilterChange("genre", e.target.value)
+                        }
+                        className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+                      >
+                        <option value="">All Genres</option>
+                        {genres.map((genre) => (
+                          <option key={genre.id} value={genre.id}>
+                            {genre.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">
+                        Rating
+                      </label>
+                      <select
+                        value={filters.rating}
+                        onChange={(e) =>
+                          handleFilterChange("rating", e.target.value)
+                        }
+                        className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+                      >
+                        <option value="">All Ratings</option>
+                        <option value="9">9.0+ Stars</option>
+                        <option value="8">8.0+ Stars</option>
+                        <option value="7">7.0+ Stars</option>
+                        <option value="6">6.0+ Stars</option>
+                        <option value="5">5.0+ Stars</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm mb-2">
+                        Sort By
+                      </label>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="w-full bg-black/50 border border-gray-600/50 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"
+                      >
+                        <option value="popularity">Popularity</option>
+                        <option value="rating">Rating</option>
+                        <option value="release_date">Release Date</option>
+                        <option value="title">Title</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -667,31 +677,32 @@ const ModernSearch = () => {
                   </button>
 
                   <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full">
-                    {[
-                      ...Array(Math.min(5, Math.ceil(totalResults / 20))),
-                    ].map((_, index) => {
-                      const pageNumber =
-                        currentPage <= 3
-                          ? index + 1
-                          : currentPage - 2 + index;
-                      const totalPages = Math.ceil(totalResults / 20);
+                    {[...Array(Math.min(5, Math.ceil(totalResults / 20)))].map(
+                      (_, index) => {
+                        const pageNumber =
+                          currentPage <= 3
+                            ? index + 1
+                            : currentPage - 2 + index;
+                        const totalPages = Math.ceil(totalResults / 20);
 
-                      if (pageNumber > totalPages) return null;
+                        if (pageNumber > totalPages) return null;
 
-                      return (
-                        <button
-                          key={pageNumber}
-                          onClick={() => setCurrentPage(pageNumber)}
-                          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer flex-shrink-0 ${ // Added flex-shrink-0
-                            currentPage === pageNumber
-                              ? "bg-purple-600 text-white border-purple-500"
-                              : "bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50"
-                          }`}
-                        >
-                          {pageNumber}
-                        </button>
-                      );
-                    })}
+                        return (
+                          <button
+                            key={pageNumber}
+                            onClick={() => setCurrentPage(pageNumber)}
+                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg font-medium transition-colors backdrop-blur-md border text-sm sm:text-base cursor-pointer flex-shrink-0 ${
+                              // Added flex-shrink-0
+                              currentPage === pageNumber
+                                ? "bg-purple-600 text-white border-purple-500"
+                                : "bg-black/50 hover:bg-black/70 text-gray-300 border-gray-700/50"
+                            }`}
+                          >
+                            {pageNumber}
+                          </button>
+                        );
+                      }
+                    )}
                   </div>
 
                   <button

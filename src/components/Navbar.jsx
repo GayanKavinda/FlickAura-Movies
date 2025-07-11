@@ -15,7 +15,7 @@ import {
   ChevronDown,
   Zap,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,11 +49,6 @@ const Navbar = () => {
       setSearchQuery("");
       if (isMenuOpen) setIsMenuOpen(false);
     }
-  };
-
-  const handleNavClick = (path) => {
-    // Replace with: navigate(path) or use Link component
-    console.log("Navigate to:", path);
   };
 
   const navItems = [
@@ -95,7 +90,7 @@ const Navbar = () => {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div
-              onClick={() => handleNavClick("/")}
+              onClick={() => navigate("/")}
               className="flex items-center space-x-3 group cursor-pointer"
             >
               <div className="relative">
@@ -130,13 +125,13 @@ const Navbar = () => {
                       />
                     </button>
                   ) : (
-                    <button
-                      onClick={() => handleNavClick(item.path)}
+                    <Link
+                      to={item.path}
                       className="flex items-center space-x-2 px-4 py-2 text-white hover:text-cyan-400 transition-colors duration-200 font-medium rounded-xl hover:bg-white/10"
                     >
                       {item.icon && <item.icon className="h-4 w-4" />}
                       <span>{item.name}</span>
-                    </button>
+                    </Link>
                   )}
 
                   {/* Dropdown Menu */}
@@ -144,14 +139,14 @@ const Navbar = () => {
                     <div className="absolute top-full left-0 mt-2 w-56 bg-black/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-cyan-500/20 overflow-hidden">
                       <div className="p-2">
                         {item.items.map((subItem) => (
-                          <button
+                          <Link
                             key={subItem.name}
-                            onClick={() => handleNavClick(subItem.path)}
+                            to={subItem.path}
                             className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 group w-full text-left"
                           >
                             <subItem.icon className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300" />
                             <span>{subItem.name}</span>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -192,18 +187,18 @@ const Navbar = () => {
 
                 {/* Action Buttons */}
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => handleNavClick("/watchlist")}
+                  <Link
+                    to="/watchlist"
                     className="p-3 text-white hover:text-pink-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
                   >
                     <Heart className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
-                  </button>
-                  <button
-                    onClick={() => handleNavClick("/login")}
+                  </Link>
+                  <Link
+                    to="/login"
                     className="p-3 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
                   >
                     <User className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -276,58 +271,58 @@ const Navbar = () => {
                       {activeDropdown === `mobile-${item.dropdown}` && (
                         <div className="ml-6 space-y-1">
                           {item.items.map((subItem) => (
-                            <button
+                            <Link
                               key={subItem.name}
-                              onClick={() => handleNavClick(subItem.path)}
+                              to={subItem.path}
                               className="flex items-center space-x-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
                             >
                               <subItem.icon className="h-4 w-4 text-cyan-400" />
                               <span>{subItem.name}</span>
-                            </button>
+                            </Link>
                           ))}
                         </div>
                       )}
                     </>
                   ) : (
-                    <button
-                      onClick={() => handleNavClick(item.path)}
+                    <Link
+                      to={item.path}
                       className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
                     >
                       {item.icon && <item.icon className="h-5 w-5" />}
                       <span>{item.name}</span>
-                    </button>
+                    </Link>
                   )}
                 </div>
               ))}
 
               {/* Mobile Action Items */}
               <div className="border-t border-cyan-500/20 pt-4 space-y-2">
-                <button
-                  onClick={() => handleNavClick("/watchlist")}
+                <Link
+                  to="/watchlist"
                   className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
                 >
                   <Heart className="h-5 w-5" />
                   <span>My Watchlist</span>
-                </button>
-                <button
-                  onClick={() => handleNavClick("/login")}
+                </Link>
+                <Link
+                  to="/login"
                   className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
                 >
                   <User className="h-5 w-5" />
                   <span>Login</span>
-                </button>
-                <button
-                  onClick={() => handleNavClick("/contact")}
+                </Link>
+                <Link
+                  to="/contact"
                   className="block px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
                 >
                   Contact Us
-                </button>
-                <button
-                  onClick={() => handleNavClick("/about")}
+                </Link>
+                <Link
+                  to="/about"
                   className="block px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
                 >
                   About
-                </button>
+                </Link>
               </div>
             </div>
           </div>
