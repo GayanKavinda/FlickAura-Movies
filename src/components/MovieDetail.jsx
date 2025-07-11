@@ -152,7 +152,7 @@ const MovieDetail = () => {
       // Parallax effect for backdrop image (only on desktop)
       if (backdropImageRef.current && window.innerWidth > 768) {
         gsap.to(backdropImageRef.current, {
-          yPercent: 20,
+          yPercent: 50,
           ease: "none",
           scrollTrigger: {
             trigger: heroRef.current,
@@ -383,7 +383,11 @@ const MovieDetail = () => {
                 <button
                   ref={playButtonRef}
                   onClick={() => {
-                    /* Logic to open modal or play video directly */
+                    // Scroll to Featured Trailer section
+                    const featuredTrailerSection = document.getElementById('featured-trailer');
+                    if (featuredTrailerSection) {
+                      featuredTrailerSection.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                   className="bg-yellow-400 text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0 cursor-pointer"
                 >
@@ -401,9 +405,10 @@ const MovieDetail = () => {
         <section
           className="w-full bg-gray-800 py-8 md:py-12 px-4 md:px-8 shadow-inner"
           ref={videoSectionRef}
+          style={{ backgroundImage: `url(${movie.backdrop_path ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}` : 'https://via.placeholder.com/1920x1080?text=No+Backdrop+Available'})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left">
+            <h2 id='featured-trailer' className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left">
               Featured Trailer
             </h2>
             <div className="mb-6 md:mb-8 bg-gray-900 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl">

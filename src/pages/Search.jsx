@@ -96,11 +96,11 @@ const ModernSearch = () => {
 
     setLoading(true);
     try {
-      const apiKey = "3be3d6240008ba97e1e073581dadc972";
+      const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
       const baseUrl = "https://api.themoviedb.org/3/search/movie";
       const params = new URLSearchParams({
-        api_key: apiKey,
+        api_key: API_KEY,
         query: searchQuery,
         language: "en-US",
         page: currentPage.toString(),
