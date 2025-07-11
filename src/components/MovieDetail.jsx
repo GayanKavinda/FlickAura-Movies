@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 import { tmdb } from "../api/tmdb";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger"; // Import ScrollTrigger
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -39,12 +39,12 @@ const MovieDetail = () => {
   const videoSectionRef = useRef(null);
   const infoSectionRef = useRef(null);
   const castCrewSectionRef = useRef(null);
-  const backdropImageRef = useRef(null); // Ref for the backdrop image itself for parallax
+  const backdropImageRef = useRef(null);
 
-  // --- FIX: Scroll to top on component mount/ID change ---
+  // Scroll to top on component mount/ID change
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
-  }, [id]); // Rerun when the movie ID changes
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -142,24 +142,23 @@ const MovieDetail = () => {
           stagger: 0.2,
           delay: 1,
           scrollTrigger: {
-            trigger: videoSectionRef.current, // Use the first section as trigger
-            start: "top 85%", // When the top of the trigger hits 85% of viewport
+            trigger: videoSectionRef.current,
+            start: "top 85%",
             toggleActions: "play none none none",
-            // markers: true, // For debugging
           },
         }
       );
 
-      // Parallax effect for backdrop image
-      if (backdropImageRef.current) {
+      // Parallax effect for backdrop image (only on desktop)
+      if (backdropImageRef.current && window.innerWidth > 768) {
         gsap.to(backdropImageRef.current, {
-          yPercent: 20, // Move background 20% of its height relative to scroll
+          yPercent: 20,
           ease: "none",
           scrollTrigger: {
             trigger: heroRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: true, // Smoothly animate on scroll
+            scrub: true,
           },
         });
       }
@@ -214,7 +213,7 @@ const MovieDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center pt-20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-yellow-400 mx-auto mb-4"></div>
           <p className="text-white text-xl">Loading movie details...</p>
@@ -225,8 +224,8 @@ const MovieDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center pt-20">
+        <div className="text-center px-4">
           <h2 className="text-red-500 text-2xl mb-4">Error: {error}</h2>
           <Link to="/" className="text-yellow-400 hover:text-yellow-300">
             <FaArrowLeft className="inline mr-2" />
@@ -239,8 +238,8 @@ const MovieDetail = () => {
 
   if (!movie) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center pt-20">
+        <div className="text-center px-4">
           <h2 className="text-white text-2xl mb-4">Movie not found</h2>
           <Link to="/" className="text-yellow-400 hover:text-yellow-300">
             <FaArrowLeft className="inline mr-2" />
@@ -264,7 +263,7 @@ const MovieDetail = () => {
       {/* Hero Section with Backdrop */}
       <div
         ref={heroRef}
-        className="relative h-screen overflow-hidden flex items-end pb-12"
+        className="relative min-h-screen md:h-screen overflow-hidden flex items-end pb-6 md:pb-12"
       >
         {/* Parallax Backdrop Image */}
         <div
@@ -275,112 +274,115 @@ const MovieDetail = () => {
           }}
         ></div>
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/70 to-gray-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-gray-900/70 to-gray-900"></div>
 
-        {/* Navigation - Moved down */}
-        <div className="absolute top-20 left-6 z-10"> {/* Adjusted top-6 to top-20 */}
+        {/* Navigation */}
+        <div className="absolute top-24 md:top-28 left-4 md:left-6 z-20">
           <Link
-            to="/movies/popular"
-            className="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/70 transition-all duration-300 flex items-center gap-2 text-sm md:text-base"
+            to="/movies"
+            className="bg-black/50 backdrop-blur-sm text-white px-3 py-2 md:px-4 md:py-2 rounded-full hover:bg-black/70 transition-all duration-300 flex items-center gap-2 text-sm md:text-base"
           >
-            <FaArrowLeft />
-            Back to Movies
+            <FaArrowLeft className="text-xs md:text-sm" />
+            <span className="hidden sm:inline">Back to Movies</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 
-        {/* Action Buttons - Moved down */}
-        <div className="absolute top-20 right-6 z-10 flex gap-3"> {/* Adjusted top-6 to top-20 */}
-          <button className="bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-lg">
+        {/* Action Buttons */}
+        <div className="absolute top-24 md:top-28 right-4 md:right-6 z-20 flex gap-2 md:gap-3">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
             <FaHeart />
           </button>
-          <button className="bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-lg">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
             <FaBookmark />
           </button>
-          <button className="bg-black/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-lg">
+          <button className="bg-black/50 backdrop-blur-sm text-white p-2 md:p-3 rounded-full hover:bg-black/70 transition-all duration-300 text-sm md:text-lg">
             <FaShare />
           </button>
         </div>
 
         {/* Movie Info Overlay */}
-        <div className="max-w-7xl mx-auto px-8 w-full relative z-10">
-          <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-end">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 pt-32 md:pt-20 lg:pt-0">
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center lg:items-end">
             {/* Poster */}
-            <div className="flex-shrink-0" ref={posterRef}>
+            <div className="flex-shrink-0 order-1 lg:order-1" ref={posterRef}>
               <img
                 src={posterUrl}
                 alt={movie.title}
-                className="w-48 h-72 md:w-64 md:h-96 object-cover rounded-2xl shadow-2xl transform -translate-y-16 lg:translate-y-0 border-4 border-gray-800"
+                className="w-40 h-60 sm:w-48 sm:h-72 md:w-56 md:h-84 lg:w-64 lg:h-96 object-cover rounded-xl md:rounded-2xl shadow-2xl transform lg:-translate-y-16 border-2 md:border-4 border-gray-800"
               />
             </div>
 
             {/* Movie Details */}
-            <div className="flex-1 text-white text-center lg:text-left -mt-16 lg:mt-0">
+            <div className="flex-1 text-white text-center lg:text-left order-2 lg:order-2">
               <h1
                 ref={titleRef}
-                className="text-4xl md:text-5xl font-bold mb-2 leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 leading-tight"
               >
                 {movie.title}
               </h1>
               {movie.tagline && (
                 <p
                   ref={taglineRef}
-                  className="text-xl md:text-2xl text-yellow-400 italic mb-4 opacity-90"
+                  className="text-lg sm:text-xl md:text-2xl text-yellow-400 italic mb-3 md:mb-4 opacity-90"
                 >
                   {movie.tagline}
                 </p>
               )}
 
               {/* Rating and Meta Info */}
-              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 md:gap-6 mb-6">
-                <div className="flex items-center gap-2 bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm md:text-lg">
-                  <FaStar />
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 md:gap-4 mb-4 md:mb-6">
+                <div className="flex items-center gap-1 md:gap-2 bg-yellow-400 text-black px-2 md:px-4 py-1 md:py-2 rounded-full font-bold text-xs md:text-lg">
+                  <FaStar className="text-xs md:text-sm" />
                   <span>{movie.vote_average?.toFixed(1)}</span>
-                  <span className="text-xs md:text-sm opacity-75">
+                  <span className="text-xs opacity-75 hidden sm:inline">
                     ({movie.vote_count?.toLocaleString()} votes)
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm md:text-base">
-                  <FaCalendarAlt />
+                <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
+                  <FaCalendarAlt className="text-xs md:text-sm" />
                   <span>
                     {movie.release_date
                       ? new Date(movie.release_date).getFullYear()
                       : "N/A"}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm md:text-base">
-                  <FaClock />
+                <div className="flex items-center gap-1 md:gap-2 text-gray-300 text-xs md:text-base">
+                  <FaClock className="text-xs md:text-sm" />
                   <span>{formatRuntime(movie.runtime)}</span>
                 </div>
-                <div className="flex gap-2">
-                  {movie.genres?.map((genre) => (
-                    <span
-                      key={genre.id}
-                      className="bg-gray-700/80 px-3 py-1 rounded-full text-xs md:text-sm text-gray-200"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
+              </div>
+
+              {/* Genres */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-4 md:mb-6">
+                {movie.genres?.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="bg-gray-700/80 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm text-gray-200"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
               </div>
 
               {/* Overview */}
               <p
                 ref={overviewRef}
-                className="text-base md:text-lg leading-relaxed max-w-4xl mb-6 opacity-90 mx-auto lg:mx-0"
+                className="text-sm md:text-base lg:text-lg leading-relaxed max-w-4xl mb-4 md:mb-6 opacity-90 mx-auto lg:mx-0"
               >
                 {movie.overview || "No overview available."}
               </p>
 
-              {/* Play Button (Reduced Size) */}
+              {/* Play Button */}
               {selectedVideo && (
                 <button
                   ref={playButtonRef}
                   onClick={() => {
                     /* Logic to open modal or play video directly */
                   }}
-                  className="bg-yellow-400 text-black px-6 py-3 rounded-full font-bold text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0"
+                  className="bg-yellow-400 text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0"
                 >
-                  <FaPlay className="text-md" />
+                  <FaPlay className="text-sm md:text-md" />
                   Watch Trailer
                 </button>
               )}
@@ -392,28 +394,27 @@ const MovieDetail = () => {
       {/* Full-width Main Video Player Section */}
       {selectedVideo && (
         <section
-          className="w-full bg-gray-800 py-12 px-4 md:px-8 shadow-inner"
+          className="w-full bg-gray-800 py-8 md:py-12 px-4 md:px-8 shadow-inner"
           ref={videoSectionRef}
         >
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-white text-3xl font-bold mb-8 text-center md:text-left">
+            <h2 className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left">
               Featured Trailer
             </h2>
-            <div className="mb-8 bg-gray-900 rounded-2xl p-4 shadow-xl">
-              <div className="relative aspect-video rounded-xl overflow-hidden">
+            <div className="mb-6 md:mb-8 bg-gray-900 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl">
+              <div className="relative aspect-video rounded-lg md:rounded-xl overflow-hidden">
                 <iframe
                   width="100%"
                   height="100%"
-                  // --- IMPORTANT FIX: Correct YouTube URL structure ---
-                  src={`http://www.youtube.com/embed/${selectedVideo.key}?autoplay=0&rel=0&modestbranding=1`}
+                  src={`https://www.youtube.com/embed/${selectedVideo.key}?autoplay=0&rel=0&modestbranding=1`}
                   title={selectedVideo.name}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  className="rounded-xl"
+                  className="rounded-lg md:rounded-xl"
                 ></iframe>
               </div>
-              <h3 className="text-white text-xl font-semibold mt-4">
+              <h3 className="text-white text-lg md:text-xl font-semibold mt-3 md:mt-4">
                 {selectedVideo.name}
               </h3>
               <p className="text-gray-400 text-sm">{selectedVideo.type}</p>
@@ -422,8 +423,8 @@ const MovieDetail = () => {
         </section>
       )}
 
-      {/* Content Sections (remaining within max-width) */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
+      {/* Content Sections */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
         {/* Other Videos Section (Thumbnails) */}
         {videos.length > 0 && (
           <section className="mb-16">
@@ -444,8 +445,7 @@ const MovieDetail = () => {
                   }`}
                 >
                   <img
-                    // --- IMPORTANT FIX: Correct YouTube thumbnail URL structure ---
-                    src={`https://img.youtube.com/vi/${video.key}/mqdefault.jpg`}
+                    src={`http://img.youtube.com/vi/${video.key}/mqdefault.jpg`} // Corrected YouTube thumbnail URL
                     alt={video.name}
                     className="w-full h-full object-cover"
                   />
@@ -465,78 +465,78 @@ const MovieDetail = () => {
         )}
 
         {/* Movie Stats */}
-        <section className="mb-16" ref={infoSectionRef}>
-          <h2 className="text-white text-3xl font-bold mb-8 border-b-2 border-gray-700 pb-4">
+        <section className="mb-12 md:mb-16" ref={infoSectionRef}>
+          <h2 className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 border-b-2 border-gray-700 pb-4">
             Movie Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-              <div className="flex items-center gap-3 mb-2">
-                <FaDollarSign className="text-yellow-400 text-xl" />
-                <h3 className="text-white font-semibold">Budget</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+              <div className="flex items-center gap-2 md:gap-3 mb-2">
+                <FaDollarSign className="text-yellow-400 text-lg md:text-xl" />
+                <h3 className="text-white font-semibold text-sm md:text-base">Budget</h3>
               </div>
-              <p className="text-2xl font-bold text-yellow-400">
+              <p className="text-lg md:text-2xl font-bold text-yellow-400">
                 {formatCurrency(movie.budget)}
               </p>
             </div>
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-              <div className="flex items-center gap-3 mb-2">
-                <FaDollarSign className="text-green-400 text-xl" />
-                <h3 className="text-white font-semibold">Revenue</h3>
+            <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+              <div className="flex items-center gap-2 md:gap-3 mb-2">
+                <FaDollarSign className="text-green-400 text-lg md:text-xl" />
+                <h3 className="text-white font-semibold text-sm md:text-base">Revenue</h3>
               </div>
-              <p className="text-2xl font-bold text-green-400">
+              <p className="text-lg md:text-2xl font-bold text-green-400">
                 {formatCurrency(movie.revenue)}
               </p>
             </div>
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-              <div className="flex items-center gap-3 mb-2">
-                <FaGlobe className="text-blue-400 text-xl" />
-                <h3 className="text-white font-semibold">Countries</h3>
+            <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+              <div className="flex items-center gap-2 md:gap-3 mb-2">
+                <FaGlobe className="text-blue-400 text-lg md:text-xl" />
+                <h3 className="text-white font-semibold text-sm md:text-base">Countries</h3>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-gray-300 text-sm md:text-lg">
                 {movie.production_countries
                   ?.map((c) => c.iso_3166_1)
                   .join(", ") || "N/A"}
               </p>
             </div>
-            <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-              <div className="flex items-center gap-3 mb-2">
-                <FaGlobe className="text-purple-400 text-xl" />
-                <h3 className="text-white font-semibold">Languages</h3>
+            <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+              <div className="flex items-center gap-2 md:gap-3 mb-2">
+                <FaGlobe className="text-purple-400 text-lg md:text-xl" />
+                <h3 className="text-white font-semibold text-sm md:text-base">Languages</h3>
               </div>
-              <p className="text-gray-300 text-lg">
+              <p className="text-gray-300 text-sm md:text-lg">
                 {movie.spoken_languages
                   ?.map((l) => l.english_name)
                   .join(", ") || "N/A"}
               </p>
             </div>
             {movie.imdb_id && (
-              <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-                <div className="flex items-center gap-3 mb-2">
-                  <FaImdb className="text-orange-400 text-xl" />
-                  <h3 className="text-white font-semibold">IMDb Link</h3>
+              <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+                <div className="flex items-center gap-2 md:gap-3 mb-2">
+                  <FaImdb className="text-orange-400 text-lg md:text-xl" />
+                  <h3 className="text-white font-semibold text-sm md:text-base">IMDb Link</h3>
                 </div>
                 <a
                   href={`https://www.imdb.com/title/${movie.imdb_id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline text-lg"
+                  className="text-blue-400 hover:underline text-sm md:text-lg"
                 >
                   View on IMDb
                 </a>
               </div>
             )}
             {movie.homepage && (
-              <div className="bg-gray-800 p-6 rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
-                <div className="flex items-center gap-3 mb-2">
-                  <FaGlobe className="text-teal-400 text-xl" />
-                  <h3 className="text-white font-semibold">Homepage</h3>
+              <div className="bg-gray-800 p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col items-start movie-stat-card">
+                <div className="flex items-center gap-2 md:gap-3 mb-2">
+                  <FaGlobe className="text-teal-400 text-lg md:text-xl" />
+                  <h3 className="text-white font-semibold text-sm md:text-base">Homepage</h3>
                 </div>
                 <a
                   href={movie.homepage}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline text-lg truncate w-full"
+                  className="text-blue-400 hover:underline text-sm md:text-lg truncate w-full"
                 >
                   {movie.homepage.replace(/(^\w+:|^)\/\//, "")}
                 </a>
@@ -546,24 +546,24 @@ const MovieDetail = () => {
         </section>
 
         {/* Cast & Crew */}
-        <section className="mb-16" ref={castCrewSectionRef}>
-          <h2 className="text-white text-3xl font-bold mb-8 border-b-2 border-gray-700 pb-4">
+        <section className="mb-12 md:mb-16" ref={castCrewSectionRef}>
+          <h2 className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 border-b-2 border-gray-700 pb-4">
             Cast & Crew
           </h2>
 
           {/* Cast */}
           {credits.cast.length > 0 && (
-            <div className="mb-12">
-              <h3 className="text-white text-2xl font-semibold mb-6">
+            <div className="mb-8 md:mb-12">
+              <h3 className="text-white text-xl md:text-2xl font-semibold mb-4 md:mb-6">
                 Top Cast
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">
                 {credits.cast.slice(0, 12).map((person) => (
                   <div
                     key={person.id}
-                    className="text-center group bg-gray-800 rounded-xl p-3 shadow-md cast-crew-item"
+                    className="text-center group bg-gray-800 rounded-lg md:rounded-xl p-2 md:p-3 shadow-md cast-crew-item"
                   >
-                    <div className="relative mb-4 overflow-hidden rounded-xl">
+                    <div className="relative mb-2 md:mb-4 overflow-hidden rounded-lg md:rounded-xl">
                       <img
                         src={
                           person.profile_path
@@ -571,13 +571,13 @@ const MovieDetail = () => {
                             : "https://via.placeholder.com/300x450?text=No+Image"
                         }
                         alt={person.name}
-                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="w-full h-32 sm:h-40 md:h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
-                    <h4 className="text-white font-semibold text-sm mb-1 truncate">
+                    <h4 className="text-white font-semibold text-xs md:text-sm mb-1 truncate">
                       {person.name}
                     </h4>
-                    <p className="text-gray-400 text-xs">{person.character}</p>
+                    <p className="text-gray-400 text-xs truncate">{person.character}</p>
                   </div>
                 ))}
               </div>
@@ -587,10 +587,10 @@ const MovieDetail = () => {
           {/* Key Crew */}
           {credits.crew.length > 0 && (
             <div>
-              <h3 className="text-white text-2xl font-semibold mb-6">
+              <h3 className="text-white text-xl md:text-2xl font-semibold mb-4 md:mb-6">
                 Key Crew
               </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                 {credits.crew
                   .filter((person) =>
                     [
@@ -604,9 +604,9 @@ const MovieDetail = () => {
                   .map((person) => (
                     <div
                       key={`${person.id}-${person.job}`}
-                      className="bg-gray-800 p-4 rounded-xl shadow-md cast-crew-item"
+                      className="bg-gray-800 p-3 md:p-4 rounded-lg md:rounded-xl shadow-md cast-crew-item"
                     >
-                      <h4 className="text-white font-semibold text-sm mb-1 truncate">
+                      <h4 className="text-white font-semibold text-xs md:text-sm mb-1 truncate">
                         {person.name}
                       </h4>
                       <p className="text-gray-400 text-xs">{person.job}</p>
