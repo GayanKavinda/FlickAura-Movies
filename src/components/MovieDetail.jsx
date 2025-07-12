@@ -109,38 +109,49 @@ const MovieDetail = () => {
   };
 
   // GSAP Animations
-  useEffect(() => {
-    if (!loading && movie) {
-      // Clear any existing ScrollTriggers to prevent duplicates on ID change
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+useEffect(() => {
+  if (!loading && movie) {
+    // Clear any existing ScrollTriggers to prevent duplicates on ID change
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 
-      // Hero section entrance animation
-      gsap.fromTo(
-        heroRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1, ease: "power2.out" }
-      );
+    // Helper function to safely animate elements
+    const animateIfExists = (ref, fromProps, toProps, options = {}) => {
+      if (ref.current) {
+        gsap.fromTo(ref.current, fromProps, { ...toProps, ...options });
+      }
+    };
 
-      gsap.fromTo(
-        posterRef.current,
-        { y: 100, opacity: 0, scale: 0.8 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: "back.out(1.7)",
-          delay: 0.3,
-        }
-      );
+    // Hero section entrance animation
+    animateIfExists(
+      heroRef,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power2.out" }
+    );
 
+    // Poster animation
+    animateIfExists(
+      posterRef,
+      { y: 100, opacity: 0, scale: 0.8 },
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: "back.out(1.7)",
+        delay: 0.3,
+      }
+    );
+
+    // Title, tagline, overview, and play button animations
+    const textElements = [
+      titleRef.current,
+      taglineRef.current,
+      overviewRef.current,
+      playButtonRef.current,
+    ].filter(Boolean); // Filter out null refs
+    if (textElements.length > 0) {
       gsap.fromTo(
-        [
-          titleRef.current,
-          taglineRef.current,
-          overviewRef.current,
-          playButtonRef.current,
-        ],
+        textElements,
         { y: 50, opacity: 0 },
         {
           y: 0,
@@ -151,14 +162,17 @@ const MovieDetail = () => {
           delay: 0.5,
         }
       );
+    }
 
-      // Section titles fade-in with a slight upward movement
+    // Section titles animation
+    const sectionElements = [
+      videoSectionRef.current,
+      infoSectionRef.current,
+      castCrewSectionRef.current,
+    ].filter(Boolean);
+    if (sectionElements.length > 0) {
       gsap.fromTo(
-        [
-          videoSectionRef.current,
-          infoSectionRef.current,
-          castCrewSectionRef.current,
-        ],
+        sectionElements,
         { opacity: 0, y: 30 },
         {
           opacity: 1,
@@ -174,23 +188,26 @@ const MovieDetail = () => {
           },
         }
       );
+    }
 
-      // Parallax effect for backdrop image (only on desktop)
-      if (backdropImageRef.current && window.innerWidth > 768) {
-        gsap.to(backdropImageRef.current, {
-          yPercent: 50,
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
+    // Parallax effect for backdrop image (only on desktop)
+    if (backdropImageRef.current && window.innerWidth > 768) {
+      gsap.to(backdropImageRef.current, {
+        yPercent: 50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
 
-      // Advanced effect for movie stats cards
-      gsap.from(".movie-stat-card", {
+    // Movie stats cards animation
+    const statCards = document.querySelectorAll(".movie-stat-card");
+    if (statCards.length > 0) {
+      gsap.from(statCards, {
         opacity: 0,
         y: 50,
         scale: 0.9,
@@ -203,9 +220,12 @@ const MovieDetail = () => {
           toggleActions: "play none none none",
         },
       });
+    }
 
-      // Advanced effect for cast/crew members
-      gsap.from(".cast-crew-item", {
+    // Cast/crew animation
+    const castCrewItems = document.querySelectorAll(".cast-crew-item");
+    if (castCrewItems.length > 0) {
+      gsap.from(castCrewItems, {
         opacity: 0,
         y: 30,
         stagger: 0.05,
@@ -218,7 +238,8 @@ const MovieDetail = () => {
         },
       });
     }
-  }, [loading, movie]);
+  }
+}, [loading, movie]);
 
   const formatRuntime = (minutes) => {
     if (!minutes) return "N/A";

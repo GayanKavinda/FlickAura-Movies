@@ -1,24 +1,26 @@
-// src/App.jsx
 import { Routes, Route, useLocation } from "react-router-dom";
-import Welcome from "./pages/Welcome";
-import Navbar from "./components/Navbar"; // Ensure this line is present
+import Login from "./auth/Login"; 
+import Signup from "./auth/Signup";
+
+import Navbar from "./components/Navbar";
 import Hero from "./components/Hero"
-import ParticleCursor from "./components/ParticleCursor"; // Add this import
-// Import other components for new routes
-import PopularMovies from "./pages/PopularMovies"; // Keep this
-import NowPlaying from "./pages/NowPlaying"; // Placeholder
-import Upcoming from "./pages/Upcoming"; // Placeholder
-import TopRated from "./pages/TopRated"; // Placeholder
-import Genre from "./pages/Genre"; // Placeholder
-import TVShows from "./pages/TVShows"; // Placeholder
-import People from "./pages/People"; // Placeholder
-import Watchlist from "./pages/Watchlist"; // Placeholder
-import Search from "./pages/Search"; // Placeholder
-import Contact from "./pages/Contact"; // Placeholder
-import About from "./pages/About"; // Placeholder
-import Login from "./pages/Login"; // Placeholder
+import ParticleCursor from "./components/ParticleCursor";
 import MovieDetail from './components/MovieDetail';
+
+import Welcome from "./pages/Welcome";
+import PopularMovies from "./pages/PopularMovies";
+import NowPlaying from "./pages/NowPlaying"; 
+import Upcoming from "./pages/Upcoming"; 
+import TopRated from "./pages/TopRated"; 
+import Genre from "./pages/Genre"; 
+import TVShows from "./pages/TVShows"; 
+import People from "./pages/People"; 
+import Watchlist from "./pages/Watchlist"; 
+import Search from "./pages/Search"; 
+import Contact from "./pages/Contact"; 
+import About from "./pages/About"; 
 import Footer from "./pages/Footer";
+
 
 function App() {
   const location = useLocation(); // Get the current location

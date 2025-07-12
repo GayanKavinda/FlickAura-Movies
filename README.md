@@ -38,6 +38,12 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 │   ├── assets/
 │   │   ├── react.svg
 │   │   └── screenshot-preview.png
+│   ├── assets/
+│   │   ├── react.svg
+│   │   └── screenshot-preview.png
+│   ├── auth/
+│   │   ├── Login.jsx
+│   │   ├── Signup.jsx
 │   ├── components/
 │   │   ├── Hero.jsx
 │   │   ├── MovieCard.jsx
@@ -71,7 +77,7 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 ├── .license-notice
 ├── README.md
 ├── vercel.json
-└── vite.config.js
+└── vite.config
 ```
 
 ---
