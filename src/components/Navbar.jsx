@@ -52,7 +52,7 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Home", path: "/", icon: null },
+    { name: "Home", path: "/movies", icon: null },
     {
       name: "Movies",
       icon: Film,
