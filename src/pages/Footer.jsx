@@ -1,21 +1,50 @@
-import React from 'react';
-import { Film, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube, Github, Heart, Star, Calendar, TrendingUp } from 'lucide-react';
+import React from "react";
+import {
+  Film,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Github,
+  Heart,
+  Star,
+  Calendar,
+  TrendingUp,
+  Linkedin,
+  Briefcase,
+} from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const handleNavClick = (path) => {
-    console.log('Navigate to:', path);
+    console.log("Navigate to:", path);
     // In a real app, this would be replaced with router navigation
   };
 
+  const socialUrls = {
+    facebook: "https://fb.com/gayan%20kavinda",
+    // twitter: "https://twitter.com/your-profile",
+    instagram: "https://instagram.com/gayan_kavind",
+    linkedin: "https://linkedin.com/in/gayan%20kavinda",
+    github: "https://github.com/GayanKavinda",
+    portfolio: "https://gayankv-profile.vercel.app/",
+  };
+
   const handleSocialClick = (platform) => {
-    console.log('Open social platform:', platform);
+    const url = socialUrls[platform];
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+    console.log("Open social platform:", platform);
     // In a real app, this would open the social media links
   };
 
   const handleSubscribe = () => {
-    console.log('Subscribe to newsletter');
+    console.log("Subscribe to newsletter");
     // In a real app, this would handle newsletter subscription
   };
 
@@ -24,7 +53,6 @@ const Footer = () => {
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -36,39 +64,52 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Your ultimate destination for discovering movies, TV shows, and entertainment. 
-              Explore the world of cinema with comprehensive reviews, ratings, and recommendations.
+              Your ultimate destination for discovering movies, TV shows, and
+              entertainment. Explore the world of cinema with comprehensive
+              reviews, ratings, and recommendations.
             </p>
             <div className="flex space-x-4">
-              <button 
-                onClick={() => handleSocialClick('facebook')}
+              <button
+                onClick={() => handleSocialClick("facebook")}
                 className="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Facebook className="h-5 w-5" />
               </button>
-              <button 
-                onClick={() => handleSocialClick('twitter')}
+              {/* <button
+                onClick={() => handleSocialClick("twitter")}
                 className="w-10 h-10 bg-gray-700 hover:bg-blue-400 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Twitter className="h-5 w-5" />
-              </button>
-              <button 
-                onClick={() => handleSocialClick('instagram')}
+              </button> */}
+              <button
+                onClick={() => handleSocialClick("instagram")}
                 className="w-10 h-10 bg-gray-700 hover:bg-pink-500 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Instagram className="h-5 w-5" />
               </button>
-              <button 
-                onClick={() => handleSocialClick('youtube')}
+              <button
+                onClick={() => handleSocialClick("linkedin")}
+                className="w-10 h-10 bg-gray-700 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
+              >
+                <Linkedin className="h-5 w-5" />
+              </button>
+              {/* <button
+                onClick={() => handleSocialClick("youtube")}
                 className="w-10 h-10 bg-gray-700 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Youtube className="h-5 w-5" />
-              </button>
-              <button 
-                onClick={() => handleSocialClick('github')}
+              </button> */}
+              <button
+                onClick={() => handleSocialClick("github")}
                 className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
               >
                 <Github className="h-5 w-5" />
+              </button>
+              <button
+                onClick={() => handleSocialClick("portfolio")}
+                className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors duration-200 cursor-pointer"
+              >
+                <Briefcase className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -78,8 +119,8 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <button 
-                  onClick={() => handleNavClick('/movies')}
+                <button
+                  onClick={() => handleNavClick("/movies")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <TrendingUp className="h-4 w-4" />
@@ -87,8 +128,8 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/movies/now-playing')}
+                <button
+                  onClick={() => handleNavClick("/movies/now-playing")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Film className="h-4 w-4" />
@@ -96,8 +137,8 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/movies/upcoming')}
+                <button
+                  onClick={() => handleNavClick("/movies/upcoming")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Calendar className="h-4 w-4" />
@@ -105,8 +146,8 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/movies/top-rated')}
+                <button
+                  onClick={() => handleNavClick("/movies/top-rated")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                 >
                   <Star className="h-4 w-4" />
@@ -114,16 +155,16 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/genres')}
+                <button
+                  onClick={() => handleNavClick("/genres")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Browse by Genre
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/people')}
+                <button
+                  onClick={() => handleNavClick("/people")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Celebrities
@@ -137,48 +178,48 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white">Support & Info</h3>
             <ul className="space-y-2">
               <li>
-                <button 
-                  onClick={() => handleNavClick('/about')}
+                <button
+                  onClick={() => handleNavClick("/about")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   About FlickAura
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/contact')}
+                <button
+                  onClick={() => handleNavClick("/contact")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Contact Us
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/privacy')}
+                <button
+                  onClick={() => handleNavClick("/privacy")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Privacy Policy
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/terms')}
+                <button
+                  onClick={() => handleNavClick("/terms")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Terms of Service
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/api')}
+                <button
+                  onClick={() => handleNavClick("/api")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   API Documentation
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => handleNavClick('/help')}
+                <button
+                  onClick={() => handleNavClick("/help")}
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-200 cursor-pointer"
                 >
                   Help Center
@@ -193,7 +234,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm">
               Subscribe to our newsletter for the latest movie news and updates.
             </p>
-            
+
             <div className="space-y-3">
               <input
                 type="email"
@@ -240,26 +281,28 @@ const Footer = () => {
                 <span className="text-sm">for movie lovers</span>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-6">
               <div className="text-gray-400 text-sm">
-                Powered by <span className="text-pink-400 font-medium">TMDB API</span>
+                Powered by{" "}
+                <span className="text-pink-400 font-medium">GAYAN Kav</span>
               </div>
+              {/* Powered by <span className="text-pink-400 font-medium">TMDB API</span> */}
               <div className="flex space-x-4">
-                <button 
-                  onClick={() => handleNavClick('/privacy')}
+                <button
+                  onClick={() => handleNavClick("/privacy")}
                   className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Privacy
                 </button>
-                <button 
-                  onClick={() => handleNavClick('/terms')}
+                <button
+                  onClick={() => handleNavClick("/terms")}
                   className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Terms
                 </button>
-                <button 
-                  onClick={() => handleNavClick('/cookies')}
+                <button
+                  onClick={() => handleNavClick("/cookies")}
                   className="cursor-pointer text-gray-400 hover:text-pink-400 text-sm transition-colors duration-200"
                 >
                   Cookies

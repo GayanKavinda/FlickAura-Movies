@@ -43,12 +43,10 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 │   │   ├── MovieCard.jsx
 │   │   ├── MovieDetail.jsx
 │   │   ├── Navbar.jsx
-│   │   ├── Hero Modified.txt
-│   │   ├── modern navbar.txt
-│   │   └── modern new navbar.txt
 │   ├── pages/
 │   │   ├── About.jsx
 │   │   ├── Contact.jsx
+│   │   ├── Footer.jsx
 │   │   ├── Genre.jsx
 │   │   ├── Login.jsx
 │   │   ├── NowPlaying.jsx
@@ -69,8 +67,11 @@ Welcome to **FlickAura Movies** — a stylish, feature-rich movie and TV discove
 ├── package.json
 ├── package-lock.json
 ├── vite.config.js
+├── LICENSE
 ├── .license-notice
-└── README.md
+├── README.md
+├── vercel.json
+└── vite.config.js
 ```
 
 ---
