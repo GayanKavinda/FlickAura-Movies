@@ -12,6 +12,7 @@ import {
   FaBookmark,
   FaShare,
   FaImdb,
+  FaTimes,
 } from "react-icons/fa";
 import { tmdb } from "../api/tmdb";
 import { gsap } from "gsap";
@@ -28,6 +29,7 @@ const MovieDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [modalVideo, setModalVideo] = useState(null); // Added for popup video
 
   // Refs for GSAP animations
   const heroRef = useRef(null);
@@ -59,18 +61,20 @@ const MovieDetail = () => {
         ]);
 
         setMovie(movieRes.data);
-        setVideos(
-          videosRes.data.results.filter((video) => video.site === "YouTube")
+        const fetchedVideos = videosRes.data.results.filter(
+          (video) => video.site === "YouTube"
         );
+        setVideos(fetchedVideos);
         setCredits(creditsRes.data);
 
-        const trailer = videosRes.data.results.find(
-          (video) => video.type === "Trailer" && video.site === "YouTube"
-        );
-        setSelectedVideo(
-          trailer ||
-            videosRes.data.results.find((video) => video.site === "YouTube")
-        );
+        // Select final trailer for featured section
+        const finalTrailer =
+          fetchedVideos.find(
+            (video) =>
+              video.type === "Trailer" &&
+              video.name.toLowerCase().includes("final trailer")
+          ) || fetchedVideos.find((video) => video.type === "Trailer");
+        setSelectedVideo(finalTrailer || null);
       } catch (err) {
         console.error("Error fetching movie details:", err);
         setError("Failed to load movie details. Please try again later.");
@@ -81,6 +85,28 @@ const MovieDetail = () => {
 
     fetchMovieDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (modalVideo) {
+      gsap.fromTo(
+        ".video-modal",
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
+      );
+    }
+  }, [modalVideo]);
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") closeModal();
+    };
+    if (modalVideo) window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [modalVideo]);
+
+  const closeModal = () => {
+    setModalVideo(null);
+  };
 
   // GSAP Animations
   useEffect(() => {
@@ -384,9 +410,12 @@ const MovieDetail = () => {
                   ref={playButtonRef}
                   onClick={() => {
                     // Scroll to Featured Trailer section
-                    const featuredTrailerSection = document.getElementById('featured-trailer');
+                    const featuredTrailerSection =
+                      document.getElementById("featured-trailer");
                     if (featuredTrailerSection) {
-                      featuredTrailerSection.scrollIntoView({ behavior: 'smooth' });
+                      featuredTrailerSection.scrollIntoView({
+                        behavior: "smooth",
+                      });
                     }
                   }}
                   className="bg-yellow-400 text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base hover:bg-yellow-300 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto lg:mx-0 cursor-pointer"
@@ -403,12 +432,25 @@ const MovieDetail = () => {
       {/* Full-width Main Video Player Section */}
       {selectedVideo && (
         <section
-          className="w-full bg-gray-800 py-8 md:py-12 px-4 md:px-8 shadow-inner"
+          className="w-full bg-transparent py-8 md:py-12 px-4 md:px-8 shadow-inner relative overflow-hidden"
           ref={videoSectionRef}
-          style={{ backgroundImage: `url(${movie.backdrop_path ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}` : 'https://via.placeholder.com/1920x1080?text=No+Backdrop+Available'})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="max-w-7xl mx-auto">
-            <h2 id='featured-trailer' className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left">
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-gray-800/80"
+            style={{
+              backgroundImage: `url(${
+                movie.backdrop_path
+                  ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+                  : "https://via.placeholder.com/1920x1080?text=No+Backdrop+Available"
+              })`,
+              filter: "blur(10px)", // Apply blur to background image
+            }}
+          ></div>
+          <div className="relative max-w-7xl mx-auto z-10">
+            <h2
+              id="featured-trailer"
+              className="text-white text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center md:text-left"
+            >
               Featured Trailer
             </h2>
             <div className="mb-6 md:mb-8 bg-gray-900 rounded-xl md:rounded-2xl p-3 md:p-4 shadow-xl">
@@ -433,6 +475,37 @@ const MovieDetail = () => {
         </section>
       )}
 
+      {/* Modal for Video Popup */}
+      {modalVideo && (
+        <div className="video-modal fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-xl p-4 max-w-4xl w-full relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 bg-gray-800/80 hover:bg-gray-700/80 text-white text-2xl font-bold rounded-full w-10 h-10 flex items-center justify-center transition-colors z-50"
+              aria-label="Close video modal"
+            >
+              <FaTimes className="w-6 h-6" />
+            </button>
+            <div className="relative aspect-video rounded-lg overflow-hidden">
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${modalVideo.key}?autoplay=1&rel=0&modestbranding=1`}
+                title={modalVideo.name}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-lg"
+              ></iframe>
+            </div>
+            <h3 className="text-white text-lg font-semibold mt-3">
+              {modalVideo.name}
+            </h3>
+            <p className="text-gray-400 text-sm">{modalVideo.type}</p>
+          </div>
+        </div>
+      )}
+
       {/* Content Sections */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
         {/* Other Videos Section (Thumbnails) */}
@@ -447,15 +520,13 @@ const MovieDetail = () => {
               {videos.map((video) => (
                 <button
                   key={video.id}
-                  onClick={() => setSelectedVideo(video)}
-                  className={`relative aspect-video rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-105 group ${
-                    selectedVideo?.id === video.id
-                      ? "ring-4 ring-yellow-400"
-                      : ""
+                  onClick={() => setModalVideo(video)}
+                  className={`cursor-pointer relative aspect-video rounded-xl overflow-hidden transition-all duration-300 transform hover:scale-105 group ${
+                    modalVideo?.id === video.id ? "ring-4 ring-yellow-400" : ""
                   }`}
                 >
                   <img
-                    src={`http://img.youtube.com/vi/${video.key}/mqdefault.jpg`} // Corrected YouTube thumbnail URL
+                    src={`http://img.youtube.com/vi/${video.key}/mqdefault.jpg`}
                     alt={video.name}
                     className="w-full h-full object-cover"
                   />
