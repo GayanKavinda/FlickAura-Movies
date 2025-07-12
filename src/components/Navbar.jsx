@@ -14,6 +14,8 @@ import {
   Play,
   ChevronDown,
   Zap,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -36,6 +38,7 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    if (activeDropdown) setActiveDropdown(null); // Close dropdowns when toggling mobile menu
   };
 
   const toggleDropdown = (dropdown) => {
@@ -155,7 +158,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Mobile Menu Button and Search/Actions - Repositioned */}
+            {/* Mobile Menu Button and Search/Actions */}
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-2">
                 {/* Search Bar and Action Buttons (hidden on mobile, shown on md and up) */}
@@ -193,12 +196,36 @@ const Navbar = () => {
                   >
                     <Heart className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
                   </Link>
-                  <Link
-                    to="/login"
-                    className="p-3 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
-                  >
-                    <User className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
-                  </Link>
+                  <div className="relative">
+                    <button
+                      onClick={() => toggleDropdown("user")}
+                      className="p-3 text-white hover:text-cyan-400 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+                    >
+                      <User className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
+                    </button>
+                    {activeDropdown === "user" && (
+                      <div className="absolute top-full right-0 mt-2 w-48 bg-black/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-cyan-500/20 overflow-hidden">
+                        <div className="p-2">
+                          <Link
+                            to="/login"
+                            className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <LogIn className="h-4 w-4 text-cyan-400" />
+                            <span>Login</span>
+                          </Link>
+                          <Link
+                            to="/signup"
+                            className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            <UserPlus className="h-4 w-4 text-cyan-400" />
+                            <span>Signup</span>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -304,13 +331,40 @@ const Navbar = () => {
                   <Heart className="h-5 w-5" />
                   <span>My Watchlist</span>
                 </Link>
-                <Link
-                  to="/login"
-                  className="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"
-                >
-                  <User className="h-5 w-5" />
-                  <span>Login</span>
-                </Link>
+                <div className="space-y-1">
+                  <button
+                    onClick={() => toggleDropdown("mobile-user")}
+                    className="flex items-center justify-between w-full px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200"
+                  >
+                    <span className="flex items-center space-x-3">
+                      <User className="h-5 w-5" />
+                      <span>Account</span>
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        activeDropdown === "mobile-user" ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {activeDropdown === "mobile-user" && (
+                    <div className="ml-6 space-y-1">
+                      <Link
+                        to="/login"
+                        className="flex items-center space-x-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
+                      >
+                        <LogIn className="h-4 w-4 text-cyan-400" />
+                        <span>Login</span>
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="flex items-center space-x-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 rounded-xl transition-all duration-200 w-full text-left"
+                      >
+                        <UserPlus className="h-4 w-4 text-cyan-400" />
+                        <span>Signup</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
                 <Link
                   to="/contact"
                   className="block px-4 py-3 text-white hover:bg-white/10 rounded-xl transition-all duration-200 w-full text-left"

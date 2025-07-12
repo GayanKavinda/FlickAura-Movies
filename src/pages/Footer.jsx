@@ -16,11 +16,14 @@ import {
   Linkedin,
   Briefcase,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleNavClick = (path) => {
+    navigate(path); // Navigate to the specified path
     console.log("Navigate to:", path);
     // In a real app, this would be replaced with router navigation
   };
