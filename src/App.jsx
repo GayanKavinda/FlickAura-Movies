@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Welcome from "./pages/Welcome";
 import Navbar from "./components/Navbar"; // Ensure this line is present
 import Hero from "./components/Hero"
+import ParticleCursor from "./components/ParticleCursor"; // Add this import
 // Import other components for new routes
 import PopularMovies from "./pages/PopularMovies"; // Keep this
 import NowPlaying from "./pages/NowPlaying"; // Placeholder
@@ -24,6 +25,9 @@ function App() {
 
   return (
     <>
+      {/* Particle cursor effect */}
+      <ParticleCursor />
+      
       {/* Only show Navbar if not on the Welcome page */}
       {location.pathname !== '/' && <Navbar />}
       {/* Only show Hero on /movies */}
